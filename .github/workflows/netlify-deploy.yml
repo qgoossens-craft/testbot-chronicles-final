@@ -1,4 +1,4 @@
-name: Deploy to One.com
+name: Deploy to Netlify
 
 # Déclenche le déploiement sur push vers la branche main
 on:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    name: Build and Deploy to One.com
+    name: Build and Deploy to Netlify
     runs-on: ubuntu-latest
     
     steps:
@@ -33,12 +33,18 @@ jobs:
     - name: Build Astro project
       run: npm run build
       
-    # 5. Déployer vers One.com
-    - name: Deploy to One.com
-      uses: rostimelk/one.com-deployer@master
+    # 5. Déployer vers Netlify
+    - name: Deploy to Netlify
+      uses: nwtgck/actions-netlify@v3.0
+      with:
+        publish-dir: './dist'
+        production-branch: main
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        deploy-message: "Deploy from GitHub Actions"
+        enable-pull-request-comment: false
+        enable-commit-comment: true
+        overwrites-pull-request-comment: true
       env:
-        ONE_DOMAIN_NAME: ${{ secrets.ONE_DOMAIN_NAME }}
-        ONE_SSH_KEY_PUBLIC: ${{ secrets.ONE_SSH_KEY_PUBLIC }}
-        ONE_SSH_KEY_PRIVATE: ${{ secrets.ONE_SSH_KEY_PRIVATE }}
-        TPO_SRC_PATH: "dist/"    # Dossier de build d'Astro
-        TPO_PATH: ""             # Racine du site sur One.com
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      timeout-minutes: 1

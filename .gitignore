@@ -35,3 +35,6 @@ pnpm-debug.log*
 
 # Windows thumbnail files
 Thumbs.db
+
+# Admin backup (temporarily moved for static build)
+admin-backup/
