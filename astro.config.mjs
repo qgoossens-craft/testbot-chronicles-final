@@ -6,5 +6,5 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   integrations: [tailwind()],
   site: 'https://titusconsulting.be',
-  output: 'server', // Enable server-side rendering for admin functionality
+  output: 'static', // Static build for One.com hosting
 });
