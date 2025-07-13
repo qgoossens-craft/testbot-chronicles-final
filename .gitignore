@@ -22,3 +22,16 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# temporary files
+*.tmp
+*.tmp.*
+*~
+*.swp
+*.swo
+
+# VSCode settings
+.vscode/
+
+# Windows thumbnail files
+Thumbs.db
