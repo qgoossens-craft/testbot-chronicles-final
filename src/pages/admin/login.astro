@@ -1,0 +1,182 @@
+---
+export const prerender = false;
+
+// Check if user is already authenticated
+const authCookie = Astro.cookies.get('admin_auth');
+const isAuthenticated = authCookie?.value === 'authenticated';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login | TestBot Chronicles</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+  </head>
+  <body class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center" data-is-authenticated={isAuthenticated}>
+    <!-- Grid pattern background -->
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cdefs%3E%3Cpattern id=\"grid\" width=\"60\" height=\"60\" patternUnits=\"userSpaceOnUse\"%3E%3Cpath d=\"M 60 0 L 0 0 0 60\" fill=\"none\" stroke=\"rgba(255,255,255,0.03)\" stroke-width=\"1\"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\"100%25\" height=\"100%25\" fill=\"url(%23grid)\"/%3E%3C/svg%3E')]"></div>
+    
+    <div class="relative z-10 w-full max-w-md">
+      <!-- Login Card -->
+      <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-white/20">
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <div class="flex justify-center mb-4">
+            <img src="/images/brand/titusLogo.png" alt="TestBot Chronicles" class="h-16 w-auto" />
+          </div>
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">Admin Access</h1>
+          <p class="text-gray-600">TestBot Chronicles Administration Panel</p>
+        </div>
+
+        <!-- Error Message -->
+        <div id="error-message" class="hidden mb-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-lg text-sm">
+          Invalid credentials. Please try again.
+        </div>
+
+        <!-- Login Form -->
+        <form id="login-form" class="space-y-6">
+          <div>
+            <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              required
+              autocomplete="username"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white"
+              placeholder="Enter your username"
+            />
+          </div>
+
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              autocomplete="current-password"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white"
+              placeholder="Enter your password"
+            />
+          </div>
+
+          <button
+            type="submit"
+            id="login-button"
+            class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition font-medium"
+          >
+            <span id="login-text">Sign In</span>
+            <span id="login-loading" class="hidden">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Signing in...
+            </span>
+          </button>
+        </form>
+
+        <!-- Footer -->
+        <div class="mt-8 text-center">
+          <a href="/" class="text-sm text-gray-500 hover:text-gray-700 transition">
+            ← Back to website
+          </a>
+        </div>
+      </div>
+
+      <!-- Security Notice -->
+      <div class="mt-6 text-center">
+        <p class="text-white/70 text-sm">
+          🔒 This area is restricted to authorized users only
+        </p>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    // Check if already authenticated
+    const isAuthenticated = document.body.dataset.isAuthenticated === 'true';
+    if (isAuthenticated) {
+      window.location.href = '/admin';
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('error-message');
+      
+      const loginButton = document.getElementById('login-button');
+      const loginText = document.getElementById('login-text');
+      const loginLoading = document.getElementById('login-loading');
+      
+      // Show loading state
+      loginButton.disabled = true;
+      loginText.classList.add('hidden');
+      loginLoading.classList.remove('hidden');
+      errorDiv.classList.add('hidden');
+      
+      // Send login request to API
+      try {
+        const response = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          // Redirect to admin panel
+          window.location.href = result.redirect;
+        } else {
+          // Show error with specific message
+          errorDiv.classList.remove('hidden');
+          errorDiv.textContent = result.error || 'Invalid credentials. Please try again.';
+          
+          // Reset form
+          document.getElementById('password').value = '';
+          document.getElementById('password').focus();
+        }
+      } catch (error) {
+        // Show error
+        errorDiv.classList.remove('hidden');
+        errorDiv.textContent = 'Login failed. Please try again.';
+      }
+      
+      // Reset button state
+      loginButton.disabled = false;
+      loginText.classList.remove('hidden');
+      loginLoading.classList.add('hidden');
+    });
+
+    // Auto-focus username field
+    document.getElementById('username').focus();
+
+    // Clear error on input
+    document.getElementById('username').addEventListener('input', () => {
+      document.getElementById('error-message').classList.add('hidden');
+    });
+    
+    document.getElementById('password').addEventListener('input', () => {
+      document.getElementById('error-message').classList.add('hidden');
+    });
+
+  </script>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+  </style>
+</html>

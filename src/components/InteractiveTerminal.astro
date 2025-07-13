@@ -658,14 +658,22 @@
     }
     
     showBlog() {
-      this.addOutput('[*] TestBot Chronicles - Coming Soon!', 'terminal-blue');
+      this.addOutput('[*] TestBot Chronicles - Now Live!', 'terminal-blue');
       this.addOutput('', 'terminal-gray');
-      this.addOutput('Future topics will include:', 'terminal-gray');
-      this.addOutput('• Advanced Playwright techniques', 'terminal-purple');
-      this.addOutput('• CI/CD best practices', 'terminal-purple');
-      this.addOutput('• Testing strategy deep-dives', 'terminal-purple');
-      this.addOutput('• Automation frameworks comparison', 'terminal-purple');
-      this.addOutput('• Productivity tips with Obsidian', 'terminal-purple');
+      this.addOutput('Latest articles:', 'terminal-gray');
+      this.addOutput('• Welcome to TestBot Chronicles', 'terminal-purple');
+      this.addOutput('• Playwright vs Cypress: A Practical Comparison', 'terminal-purple');
+      this.addOutput('• CI/CD Testing Best Practices', 'terminal-purple');
+      this.addOutput('', 'terminal-gray');
+      this.addOutput('[>] Visit /blog to read all articles', 'terminal-green');
+      this.addOutput('', 'terminal-gray');
+      
+      // Add a redirect after a short delay
+      setTimeout(() => {
+        window.location.href = '/blog';
+      }, 2000);
+      
+      this.addOutput('>> Redirecting to blog in 2 seconds...', 'terminal-blue');
     }
     
     showLogo() {

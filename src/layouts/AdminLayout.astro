@@ -1,0 +1,138 @@
+---
+export interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
+// We'll handle authentication check on the client side to avoid SSR issues
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | TestBot Chronicles Admin</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    
+    <!-- Include a markdown editor library -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.js"></script>
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Admin Header -->
+    <header class="bg-slate-900 border-b border-gray-200 sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <a href="/admin" class="flex items-center space-x-3">
+              <img src="/images/brand/titusLogo.png" alt="TestBot Chronicles" class="h-8 w-auto" />
+              <span class="text-xl font-bold text-white">TestBot Admin</span>
+            </a>
+          </div>
+          <div class="flex items-center space-x-6">
+            <a href="/admin" class="text-gray-300 hover:text-white transition font-medium">Dashboard</a>
+            <a href="/admin/new-post" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-medium">New Post</a>
+            <a href="/" class="text-gray-300 hover:text-white transition font-medium">View Site</a>
+            <button id="logout-btn" class="text-gray-300 hover:text-white transition font-medium border border-gray-600 px-3 py-1 rounded">
+              <svg id="logout-icon" class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+              <svg id="logout-loading" class="w-4 h-4 inline mr-1 animate-spin hidden" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span id="logout-text">Logout</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Admin Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <slot />
+    </main>
+
+    <script>
+      // Check authentication on page load
+      function checkAuth() {
+        const cookies = document.cookie.split(';');
+        const authCookie = cookies.find(cookie => cookie.trim().startsWith('admin_auth='));
+        const isAuthenticated = authCookie && authCookie.includes('authenticated');
+        
+        if (!isAuthenticated && !window.location.pathname.includes('/login')) {
+          window.location.href = '/admin/login';
+        }
+      }
+      
+      // Run auth check when page loads
+      checkAuth();
+
+      // Add logout button event listener
+      document.getElementById('logout-btn')?.addEventListener('click', logout);
+
+      async function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+          // Show loading state
+          const logoutBtn = document.getElementById('logout-btn');
+          const logoutIcon = document.getElementById('logout-icon');
+          const logoutLoading = document.getElementById('logout-loading');
+          const logoutText = document.getElementById('logout-text');
+          
+          logoutBtn.disabled = true;
+          logoutIcon.classList.add('hidden');
+          logoutLoading.classList.remove('hidden');
+          logoutText.textContent = 'Logging out...';
+          
+          // Clear cookies immediately for instant effect
+          document.cookie = 'admin_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
+          document.cookie = 'admin_auth=; path=/admin; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
+          
+          try {
+            // Also call logout API for server-side cleanup
+            await fetch('/api/admin/logout', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              }
+            });
+          } catch (error) {
+            console.log('Logout API failed, but proceeding with client-side logout');
+          }
+          
+          // Redirect to login page
+          window.location.href = '/admin/login';
+        }
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  /* Custom styles for the admin interface */
+  .admin-card {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6;
+  }
+  
+  .admin-button {
+    @apply px-4 py-2 rounded-lg font-medium transition;
+  }
+  
+  .admin-button-primary {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+  }
+  
+  .admin-button-secondary {
+    @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+  }
+  
+  .admin-input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+  }
+  
+  .admin-label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
+  }
+</style>

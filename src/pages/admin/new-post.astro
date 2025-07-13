@@ -1,0 +1,352 @@
+---
+export const prerender = false;
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all existing tags for the tag selector
+const allPosts = await getCollection('blog');
+const existingTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
+---
+
+<AdminLayout title="New Post">
+  <div class="mb-6">
+    <div class="flex items-center justify-between">
+      <h1 class="text-3xl font-bold text-gray-900">Create New Post</h1>
+      <a href="/admin" class="admin-button admin-button-secondary">
+        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back to Dashboard
+      </a>
+    </div>
+  </div>
+
+  <form id="post-form" class="space-y-6">
+    <!-- Post Metadata -->
+    <div class="admin-card">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Post Details</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Title -->
+        <div class="md:col-span-2">
+          <label for="title" class="admin-label">Title *</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            required
+            class="admin-input"
+            placeholder="Enter post title..."
+          />
+        </div>
+
+        <!-- Description -->
+        <div class="md:col-span-2">
+          <label for="description" class="admin-label">Description *</label>
+          <textarea
+            id="description"
+            name="description"
+            required
+            rows="3"
+            class="admin-input"
+            placeholder="Brief description for SEO and previews..."
+          ></textarea>
+        </div>
+
+        <!-- Publication Date -->
+        <div>
+          <label for="pubDate" class="admin-label">Publication Date *</label>
+          <input
+            type="date"
+            id="pubDate"
+            name="pubDate"
+            required
+            class="admin-input"
+          />
+        </div>
+
+        <!-- Status -->
+        <div>
+          <label for="draft" class="admin-label">Status</label>
+          <select id="draft" name="draft" class="admin-input">
+            <option value="true">Draft</option>
+            <option value="false">Published</option>
+          </select>
+        </div>
+
+        <!-- Hero Image -->
+        <div class="md:col-span-2">
+          <label for="heroImage" class="admin-label">Hero Image (Optional)</label>
+          <input
+            type="url"
+            id="heroImage"
+            name="heroImage"
+            class="admin-input"
+            placeholder="https://example.com/image.jpg"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Tags Section -->
+    <div class="admin-card">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Tags</h2>
+      <div class="space-y-4">
+        <!-- Existing Tags -->
+        {existingTags.length > 0 && (
+          <div>
+            <label class="admin-label">Existing Tags (click to add)</label>
+            <div class="flex flex-wrap gap-2">
+              {existingTags.map((tag) => (
+                <button
+                  type="button"
+                  onclick={`addTag('${tag}')`}
+                  class="bg-gray-100 hover:bg-blue-100 text-gray-800 hover:text-blue-800 px-3 py-1 rounded-full text-sm transition"
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- New Tag Input -->
+        <div>
+          <label for="newTag" class="admin-label">Add New Tag</label>
+          <div class="flex gap-2">
+            <input
+              type="text"
+              id="newTag"
+              class="admin-input"
+              placeholder="Enter new tag..."
+              onkeypress="if(event.key==='Enter'){event.preventDefault();addNewTag();}"
+            />
+            <button type="button" onclick="addNewTag()" class="admin-button admin-button-secondary whitespace-nowrap">
+              Add Tag
+            </button>
+          </div>
+        </div>
+
+        <!-- Selected Tags -->
+        <div>
+          <label class="admin-label">Selected Tags</label>
+          <div id="selectedTags" class="min-h-[2rem] border border-gray-300 rounded-lg p-3 bg-gray-50">
+            <span class="text-gray-500 text-sm">No tags selected</span>
+          </div>
+          <input type="hidden" id="tags" name="tags" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Editor -->
+    <div class="admin-card">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Content</h2>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Markdown Editor -->
+        <div>
+          <label for="content" class="admin-label">Markdown Content</label>
+          <textarea
+            id="content"
+            name="content"
+            rows="20"
+            class="admin-input font-mono text-sm"
+            placeholder="# Your Post Title
+
+Write your content in Markdown here...
+
+## Section Title
+
+Your content with **bold** and *italic* text.
+
+```javascript
+// Code example
+console.log('Hello, TestBot!');
+```
+
+- List item 1
+- List item 2
+"
+          ></textarea>
+        </div>
+
+        <!-- Live Preview -->
+        <div>
+          <label class="admin-label">Live Preview</label>
+          <div id="preview" class="border border-gray-300 rounded-lg p-4 bg-white prose prose-sm max-w-none h-[500px] overflow-y-auto">
+            <p class="text-gray-500">Preview will appear here as you type...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex justify-between">
+      <div class="space-x-4">
+        <button type="button" onclick="saveDraft()" class="admin-button admin-button-secondary">
+          Save as Draft
+        </button>
+        <button type="button" onclick="previewPost()" class="admin-button admin-button-secondary">
+          Full Preview
+        </button>
+      </div>
+      <div class="space-x-4">
+        <button type="button" onclick="resetForm()" class="admin-button admin-button-secondary">
+          Reset
+        </button>
+        <button type="submit" class="admin-button admin-button-primary">
+          Publish Post
+        </button>
+      </div>
+    </div>
+  </form>
+</AdminLayout>
+
+<script>
+  // Initialize the page
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set default publication date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('pubDate').value = today;
+    
+    // Initialize content preview
+    updatePreview();
+    
+    // Add event listener for content changes
+    document.getElementById('content').addEventListener('input', updatePreview);
+  });
+
+  // Tag management
+  let selectedTags = [];
+
+  function addTag(tag) {
+    if (!selectedTags.includes(tag)) {
+      selectedTags.push(tag);
+      updateTagsDisplay();
+    }
+  }
+
+  function addNewTag() {
+    const input = document.getElementById('newTag');
+    const tag = input.value.trim().toLowerCase().replace(/\s+/g, '-');
+    if (tag && !selectedTags.includes(tag)) {
+      selectedTags.push(tag);
+      updateTagsDisplay();
+      input.value = '';
+    }
+  }
+
+  function removeTag(tag) {
+    selectedTags = selectedTags.filter(t => t !== tag);
+    updateTagsDisplay();
+  }
+
+  function updateTagsDisplay() {
+    const container = document.getElementById('selectedTags');
+    const hiddenInput = document.getElementById('tags');
+    
+    if (selectedTags.length === 0) {
+      container.innerHTML = '<span class="text-gray-500 text-sm">No tags selected</span>';
+      hiddenInput.value = '';
+    } else {
+      container.innerHTML = selectedTags.map(tag => 
+        `<span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm mr-2 mb-2">
+          ${tag}
+          <button type="button" onclick="removeTag('${tag}')" class="ml-2 text-blue-600 hover:text-blue-800">×</button>
+        </span>`
+      ).join('');
+      hiddenInput.value = JSON.stringify(selectedTags);
+    }
+  }
+
+  // Content preview
+  function updatePreview() {
+    const content = document.getElementById('content').value;
+    const preview = document.getElementById('preview');
+    
+    if (content.trim() === '') {
+      preview.innerHTML = '<p class="text-gray-500">Preview will appear here as you type...</p>';
+      return;
+    }
+
+    // Simple markdown to HTML conversion (basic implementation)
+    let html = content
+      // Headers
+      .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+      .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+      .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+      // Bold and italic
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      // Code blocks
+      .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+      // Inline code
+      .replace(/`(.*?)`/g, '<code>$1</code>')
+      // Links
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+      // Line breaks
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/\n/g, '<br>');
+    
+    // Wrap in paragraphs
+    html = '<p>' + html + '</p>';
+    
+    preview.innerHTML = html;
+  }
+
+  // Form actions
+  function saveDraft() {
+    const form = document.getElementById('post-form');
+    document.getElementById('draft').value = 'true';
+    submitForm('draft');
+  }
+
+  function previewPost() {
+    // TODO: Open preview in new window
+    alert('Full preview functionality will be implemented');
+  }
+
+  function resetForm() {
+    if (confirm('Are you sure you want to reset the form? All changes will be lost.')) {
+      document.getElementById('post-form').reset();
+      selectedTags = [];
+      updateTagsDisplay();
+      updatePreview();
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('pubDate').value = today;
+    }
+  }
+
+  function submitForm(action = 'publish') {
+    const formData = new FormData(document.getElementById('post-form'));
+    const data = Object.fromEntries(formData);
+    
+    // Add tags
+    data.tags = selectedTags;
+    data.draft = action === 'draft' ? true : (data.draft === 'true');
+    
+    console.log('Post data:', data);
+    
+    // TODO: Send to API endpoint
+    alert(`${action === 'draft' ? 'Draft saved' : 'Post published'} successfully!\n\nNote: API integration needed for actual save functionality.`);
+  }
+
+  // Form submission
+  document.getElementById('post-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    submitForm('publish');
+  });
+</script>
+
+<style>
+  /* Custom prose styles for preview */
+  .prose h1 { @apply text-2xl font-bold mt-6 mb-4; }
+  .prose h2 { @apply text-xl font-bold mt-5 mb-3; }
+  .prose h3 { @apply text-lg font-bold mt-4 mb-2; }
+  .prose p { @apply mb-4; }
+  .prose pre { @apply bg-gray-900 text-white p-4 rounded-lg overflow-x-auto; }
+  .prose code { @apply bg-gray-100 px-2 py-1 rounded text-sm; }
+  .prose pre code { @apply bg-transparent px-0 py-0; }
+  .prose strong { @apply font-bold; }
+  .prose em { @apply italic; }
+  .prose a { @apply text-blue-600 underline; }
+</style>
