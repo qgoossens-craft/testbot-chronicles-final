@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply antialiased font-['Inter'];
+  }
+  
+  /* Custom selection colors */
+  ::selection {
+    @apply bg-accent-primary/20 text-accent-primary;
+  }
+}
+
+@layer components {
+  /* Terminal-style cursor */
+  .terminal-cursor::after {
+    content: '|';
+    @apply text-terminal-green animate-pulse;
+  }
+  
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-accent-primary to-accent-secondary bg-clip-text text-transparent;
+  }
+  
+  /* Animated gradient background */
+  .gradient-bg-animated {
+    @apply bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 bg-300% animate-gradient;
+  }
+  
+  /* Code block styling */
+  .code-block {
+    @apply bg-terminal-bg text-terminal-gray p-4 rounded-lg font-mono text-sm overflow-x-auto;
+  }
+  
+  /* Glow effect */
+  .glow {
+    @apply drop-shadow-[0_0_20px_rgba(37,99,235,0.5)];
+  }
+  
+  .prose-custom {
+    @apply prose prose-lg max-w-none
+    prose-headings:text-gray-900 
+    prose-p:text-gray-700
+    prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+    prose-code:text-purple-600 prose-code:bg-purple-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded;
+  }
+}

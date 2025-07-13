@@ -1,16 +1,269 @@
 ---
-
+import BaseLayout from '../layouts/BaseLayout.astro';
+import InteractiveTerminal from '../components/InteractiveTerminal.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Home">
+  <!-- Hero Section -->
+  <section class="relative min-h-[600px] flex items-center overflow-hidden">
+    <!-- Animated background -->
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900"></div>
+    
+    <!-- Grid pattern overlay -->
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse"%3E%3Cpath d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100%25" height="100%25" fill="url(%23grid)"/%3E%3C/svg%3E')]"></div>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div class="text-center">
+        <!-- Interactive Terminal -->
+        <InteractiveTerminal />
+        
+        <h1 class="text-5xl md:text-6xl font-bold text-white mb-6 animate-fade-up">
+          <span class="gradient-text">Automated Test Engineer</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-300 mb-8 animate-fade-up" style="animation-delay: 0.1s">
+          Crafting Quality Through Intelligent Testing
+        </p>
+        <div class="space-x-4 animate-fade-up" style="animation-delay: 0.2s">
+          <a href="/blog" class="gradient-bg-animated text-white px-8 py-4 rounded-lg hover:scale-105 transition-transform inline-block font-semibold">
+            Read TestBot Chronicles
+          </a>
+          <a href="#contact" class="bg-transparent text-white px-8 py-4 rounded-lg border-2 border-white/50 hover:bg-white/10 hover:border-white transition inline-block font-semibold">
+            Get In Touch
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-16 bg-white relative overflow-hidden">
+    <!-- Subtle background logo -->
+    <div class="absolute right-8 top-8 opacity-5">
+      <img src="/images/brand/titusLogo.png" alt="" class="h-32 w-auto" />
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">About Me</h2>
+        <p class="text-xl text-gray-600">Freelance Automated Test Engineer specializing in quality assurance and testing frameworks</p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h3 class="text-2xl font-semibold mb-4 text-gray-900">My Expertise</h3>
+          <p class="text-gray-700 mb-6">
+            As a passionate Automated Test Engineer, I help teams deliver high-quality software through intelligent testing strategies 
+            and robust automation frameworks. My approach combines technical excellence with practical solutions.
+          </p>
+          <div class="space-y-3">
+            <div class="flex items-start">
+              <svg class="w-6 h-6 text-blue-600 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span class="text-gray-700">End-to-end test automation strategy and implementation</span>
+            </div>
+            <div class="flex items-start">
+              <svg class="w-6 h-6 text-blue-600 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span class="text-gray-700">CI/CD pipeline integration and optimization</span>
+            </div>
+            <div class="flex items-start">
+              <svg class="w-6 h-6 text-blue-600 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span class="text-gray-700">Performance and security testing</span>
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="text-2xl font-semibold mb-6 text-gray-900">Tools & Technologies</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="group bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl hover:shadow-xl transition-all duration-300 border border-blue-100 hover:border-blue-300">
+              <div class="flex items-center mb-3">
+                <svg class="w-8 h-8 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+                <h4 class="font-bold text-gray-900">Testing Frameworks</h4>
+              </div>
+              <ul class="text-sm text-gray-600 space-y-2">
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> Playwright</li>
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> Cypress</li>
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> Selenium</li>
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> Jest</li>
+              </ul>
+            </div>
+            <div class="group bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl hover:shadow-xl transition-all duration-300 border border-purple-100 hover:border-purple-300">
+              <div class="flex items-center mb-3">
+                <svg class="w-8 h-8 text-purple-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                </svg>
+                <h4 class="font-bold text-gray-900">Languages</h4>
+              </div>
+              <ul class="text-sm text-gray-600 space-y-2">
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> JavaScript/TypeScript</li>
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> Python</li>
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> Java</li>
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> C#</li>
+              </ul>
+            </div>
+            <div class="group bg-gradient-to-br from-green-50 to-teal-50 p-6 rounded-xl hover:shadow-xl transition-all duration-300 border border-green-100 hover:border-green-300">
+              <div class="flex items-center mb-3">
+                <svg class="w-8 h-8 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+                </svg>
+                <h4 class="font-bold text-gray-900">CI/CD & Tools</h4>
+              </div>
+              <ul class="text-sm text-gray-600 space-y-2">
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> GitHub Actions</li>
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> Jenkins</li>
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> Docker</li>
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> Kubernetes</li>
+              </ul>
+            </div>
+            <div class="group bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl hover:shadow-xl transition-all duration-300 border border-orange-100 hover:border-orange-300">
+              <div class="flex items-center mb-3">
+                <svg class="w-8 h-8 text-orange-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <h4 class="font-bold text-gray-900">Other Skills</h4>
+              </div>
+              <ul class="text-sm text-gray-600 space-y-2">
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> API Testing</li>
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> Load Testing</li>
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> Test Strategy</li>
+                <li class="flex items-center"><span class="text-terminal-green mr-2">✓</span> BDD/TDD</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Blog Posts Preview -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">TestBot Chronicles</h2>
+        <p class="text-xl text-gray-600">Latest thoughts on testing, automation, and productivity</p>
+      </div>
+      <div class="text-center">
+        <p class="text-gray-600 mb-8">Blog posts coming soon...</p>
+        <a href="/blog" class="text-blue-600 hover:text-blue-700 font-semibold">
+          View all posts →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-16 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <div class="flex justify-center mb-6">
+          <img src="/images/brand/titusLogo.png" alt="Titus Consulting" class="h-16 w-auto opacity-80" />
+        </div>
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
+        <p class="text-xl text-gray-600">Let's discuss how I can help improve your testing processes</p>
+      </div>
+      
+      <form class="space-y-6" id="contact-form">
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+              Name *
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              placeholder="John Doe"
+            />
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+              Email *
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              placeholder="john@example.com"
+            />
+          </div>
+        </div>
+        
+        <div>
+          <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">
+            Subject *
+          </label>
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            required
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+            placeholder="Project inquiry"
+          />
+        </div>
+        
+        <div>
+          <label for="message" class="block text-sm font-medium text-gray-700 mb-2">
+            Message *
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            rows="5"
+            required
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"
+            placeholder="Tell me about your testing needs..."
+          ></textarea>
+        </div>
+        
+        <div class="text-center">
+          <button
+            type="submit"
+            class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition font-semibold"
+          >
+            Send Message
+          </button>
+        </div>
+      </form>
+      
+      <div class="mt-12 text-center">
+        <p class="text-gray-600">Or reach out directly:</p>
+        <p class="mt-2">
+          <a href="mailto:contact@titusconsulting.be" class="text-blue-600 hover:text-blue-700">
+            contact@titusconsulting.be
+          </a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+    
+    // Here you would typically send the data to your backend
+    // For now, we'll just show an alert
+    alert(`Thank you for your message! I'll get back to you soon.\n\nMessage details:\nName: ${data.name}\nEmail: ${data.email}\nSubject: ${data.subject}`);
+    
+    // Reset form
+    form.reset();
+  });
+</script>
