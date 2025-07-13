@@ -7,6 +7,6 @@ import netlify from '@astrojs/netlify';
 export default defineConfig({
   integrations: [tailwind()],
   site: 'https://titusconsulting.be',
-  output: 'server', // Server mode for admin functionality
-  adapter: netlify(), // Netlify Functions adapter
+  output: 'hybrid', // Hybrid mode for better Netlify compatibility
+  adapter: netlify(), // Netlify adapter
 });

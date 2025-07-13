@@ -310,7 +310,7 @@ createCollectionToGlobResultMap({
 });
 
 let lookupMap = {};
-lookupMap = {"blog":{"type":"content","entries":{"ci-cd-testing-best-practices":"/src/content/blog/ci-cd-testing-best-practices.md","welcome-to-testbot-chronicles":"/src/content/blog/welcome-to-testbot-chronicles.md","playwright-vs-cypress-comparison":"/src/content/blog/playwright-vs-cypress-comparison.md"}}};
+lookupMap = {"blog":{"type":"content","entries":{"playwright-vs-cypress-comparison":"/src/content/blog/playwright-vs-cypress-comparison.md","ci-cd-testing-best-practices":"/src/content/blog/ci-cd-testing-best-practices.md","welcome-to-testbot-chronicles":"/src/content/blog/welcome-to-testbot-chronicles.md"}}};
 
 new Set(Object.keys(lookupMap));
 
