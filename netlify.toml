@@ -5,25 +5,22 @@
 [build.environment]
   NODE_VERSION = "18"
 
-# Routes admin et API vers les fonctions SSR
+# Routes admin et API vers les fonctions SSR (en premier !)
 [[redirects]]
   from = "/admin/*"
   to = "/.netlify/functions/entry"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/api/*" 
   to = "/.netlify/functions/entry"
   status = 200
+  force = true
 
-# Routes statiques (blog, accueil) vers les fichiers HTML
-[[redirects]]
-  from = "/blog/*"
-  to = "/blog/:splat"
-  status = 200
-
+# Catch-all pour tout le reste vers la fonction SSR
+# (Astro SSR gère automatiquement statique vs dynamique)
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/.netlify/functions/entry"
   status = 200
-  force = false
