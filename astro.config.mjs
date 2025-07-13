@@ -8,5 +8,5 @@ export default defineConfig({
   integrations: [tailwind()],
   site: 'https://titusconsulting.be',
   output: 'server', // Server mode for admin functionality
-  adapter: netlify(), // Netlify Functions adapter (not Edge)
+  adapter: netlify(), // Netlify Functions adapter
 });

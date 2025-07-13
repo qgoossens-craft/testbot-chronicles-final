@@ -1,0 +1,29 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Routes admin et API vers les fonctions SSR
+[[redirects]]
+  from = "/admin/*"
+  to = "/.netlify/functions/entry"
+  status = 200
+
+[[redirects]]
+  from = "/api/*" 
+  to = "/.netlify/functions/entry"
+  status = 200
+
+# Routes statiques (blog, accueil) vers les fichiers HTML
+[[redirects]]
+  from = "/blog/*"
+  to = "/blog/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
