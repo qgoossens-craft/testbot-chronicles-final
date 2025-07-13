@@ -1,0 +1,44 @@
+name: Deploy to One.com
+
+# Déclenche le déploiement sur push vers la branche main
+on:
+  push:
+    branches: [ main ]
+  # Permet également de déclencher manuellement
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Build and Deploy to One.com
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 1. Récupérer le code source
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    # 2. Configurer Node.js pour Astro
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: './package-lock.json'
+        
+    # 3. Installer les dépendances
+    - name: Install dependencies
+      run: npm ci
+      
+    # 4. Build du projet Astro
+    - name: Build Astro project
+      run: npm run build
+      
+    # 5. Déployer vers One.com
+    - name: Deploy to One.com
+      uses: rostimelk/one.com-deployer@master
+      env:
+        ONE_DOMAIN_NAME: ${{ secrets.ONE_DOMAIN_NAME }}
+        ONE_SSH_KEY_PUBLIC: ${{ secrets.ONE_SSH_KEY_PUBLIC }}
+        ONE_SSH_KEY_PRIVATE: ${{ secrets.ONE_SSH_KEY_PRIVATE }}
+        TPO_SRC_PATH: "dist/"    # Dossier de build d'Astro
+        TPO_PATH: ""             # Racine du site sur One.com
