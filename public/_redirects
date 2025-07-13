@@ -1,0 +1,8 @@
+# Admin routes
+/admin/* /.netlify/functions-internal/ssr/entry 200
+
+# API routes  
+/api/* /.netlify/functions-internal/ssr/entry 200
+
+# Catch-all for dynamic routes
+/* /.netlify/functions-internal/ssr/entry 200
