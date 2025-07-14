@@ -1,0 +1,467 @@
+---
+// LoFi Radio Player Component
+---
+
+<div id="lofi-radio-player" class="fixed bottom-4 right-4 z-50 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden transition-all duration-300 hover:shadow-2xl" transition:persist>
+  <!-- Minimized State -->
+  <div id="radio-minimized" class="p-4 cursor-pointer">
+    <div class="flex items-center space-x-3">
+      <!-- Titus Logo -->
+      <div class="relative">
+        <div id="logo-icon" class="w-8 h-8 bg-black rounded-full flex items-center justify-center transition-transform duration-300">
+          <img src="/images/brand/titusLogo.png" alt="Titus Logo" class="w-6 h-6" />
+        </div>
+      </div>
+      
+      <!-- Station Info -->
+      <div class="flex-1 min-w-0">
+        <div id="current-station" class="font-medium text-sm text-gray-900 truncate">LoFi Radio</div>
+        <div id="radio-status" class="text-xs text-gray-500">Click to maximize</div>
+      </div>
+      
+      <!-- Quick Controls -->
+      <div class="flex items-center space-x-2">
+        <button id="play-pause-btn" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors">
+          <svg id="play-icon" class="w-4 h-4 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <svg id="pause-icon" class="w-4 h-4 text-gray-700 hidden" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Expanded State -->
+  <div id="radio-expanded" class="hidden">
+    <!-- Header -->
+    <div class="p-4 border-b border-gray-200/50 bg-gradient-to-r from-purple-50 to-blue-50">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="relative">
+            <div id="logo-icon-expanded" class="w-10 h-10 bg-black rounded-full flex items-center justify-center transition-transform duration-300">
+              <img src="/images/brand/titusLogo.png" alt="Titus Logo" class="w-8 h-8" />
+            </div>
+          </div>
+          <div id="player-title" class="cursor-pointer">
+            <div class="font-semibold text-gray-900">LoFi Radio Player</div>
+            <div class="text-xs text-gray-500">Click to minimize</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+    <!-- Station Selector -->
+    <div class="p-4 border-b border-gray-200/50">
+      <div class="text-sm font-medium text-gray-700 mb-3">Select Station</div>
+      <div class="space-y-2 max-h-32 overflow-y-auto">
+        <div class="station-option selected" data-station="0">
+          <div class="flex items-center space-x-3 p-2 rounded-lg bg-purple-50 border border-purple-200 cursor-pointer hover:bg-purple-100 transition-colors">
+            <div class="w-3 h-3 bg-purple-600 rounded-full"></div>
+            <div class="flex-1">
+              <div class="font-medium text-sm text-gray-900">LoFi Hip Hop</div>
+              <div class="text-xs text-gray-500">Chill beats for focus</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="station-option" data-station="1">
+          <div class="flex items-center space-x-3 p-2 rounded-lg bg-gray-50 border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
+            <div class="w-3 h-3 bg-gray-400 rounded-full"></div>
+            <div class="flex-1">
+              <div class="font-medium text-sm text-gray-900">ChillHop</div>
+              <div class="text-xs text-gray-500">Smooth instrumental</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Controls -->
+    <div class="p-4">
+      
+      <!-- Volume Control -->
+      <div class="mb-4">
+        <div class="flex items-center space-x-3">
+          <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 11.293c0 1.061-.421 2.078-1.172 2.828a4.042 4.042 0 01-2.828 1.172M9 7h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2z"/>
+          </svg>
+          <input 
+            id="volume-slider" 
+            type="range" 
+            min="0" 
+            max="100" 
+            value="50" 
+            class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+          />
+          <span id="volume-display" class="text-sm text-gray-500 w-8">50%</span>
+        </div>
+      </div>
+      
+      <!-- Main Controls -->
+      <div class="flex items-center justify-center space-x-4">
+        <button id="play-pause-main" class="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 shadow-lg">
+          <svg id="play-icon-main" class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <svg id="pause-icon-main" class="w-6 h-6 text-white hidden" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+class LoFiRadioPlayer {
+  constructor() {
+    this.isPlaying = false;
+    this.currentStation = 0;
+    this.volume = 0.5;
+    this.isExpanded = false;
+    this.isFocusMode = false;
+    
+    this.globalAudio = window.globalRadioAudio;
+    
+    // Store instance globally for view transitions
+    window.lofiRadioPlayerInstance = this;
+    
+    this.init();
+  }
+  
+  init() {
+    // Wait for global audio to be ready
+    if (this.globalAudio && this.globalAudio.isInitialized) {
+      this.syncWithGlobalState();
+    } else {
+      // Wait for global audio to initialize
+      setTimeout(() => this.init(), 100);
+      return;
+    }
+    
+    this.loadSettings();
+    this.setupEventListeners();
+    this.updateUI();
+  }
+  
+  syncWithGlobalState() {
+    if (!this.globalAudio) return;
+    
+    const globalState = this.globalAudio.getCurrentState();
+    this.isPlaying = globalState.isPlaying;
+    this.currentStation = globalState.currentStation;
+    this.volume = globalState.volume;
+    
+    if (this.isPlaying) {
+      this.startVinylAnimation();
+    }
+  }
+  
+  loadSettings() {
+    const savedExpanded = localStorage.getItem('lofi-radio-expanded');
+    
+    if (savedExpanded === 'true') {
+      this.isExpanded = true;
+    }
+  }
+  
+  saveSettings() {
+    localStorage.setItem('lofi-radio-expanded', this.isExpanded.toString());
+  }
+  
+  setupEventListeners() {
+    // Play/Pause buttons
+    document.getElementById('play-pause-btn').addEventListener('click', () => this.togglePlayPause());
+    
+    // Main play button in expanded view
+    const mainPlayBtn = document.getElementById('play-pause-main');
+    if (mainPlayBtn) {
+      mainPlayBtn.addEventListener('click', () => this.togglePlayPause());
+    }
+    
+    // Click on minimized player to expand
+    document.getElementById('radio-minimized').addEventListener('click', (e) => {
+      // Don't expand when clicking the play button
+      if (e.target.closest('#play-pause-btn')) return;
+      this.toggleExpanded();
+    });
+    
+    // Click on player title to minimize when expanded
+    const playerTitle = document.getElementById('player-title');
+    if (playerTitle) {
+      playerTitle.addEventListener('click', () => {
+        if (this.isExpanded) {
+          this.toggleExpanded();
+        }
+      });
+    }
+    
+    // Volume control
+    const volumeSlider = document.getElementById('volume-slider');
+    if (volumeSlider) {
+      volumeSlider.addEventListener('input', (e) => {
+        this.volume = e.target.value / 100;
+        this.globalAudio.setVolume(this.volume);
+        document.getElementById('volume-display').textContent = e.target.value + '%';
+        this.updateVolumeSliderBackground(e.target.value);
+        this.saveSettings();
+      });
+    }
+    
+    // Station selection
+    document.querySelectorAll('.station-option').forEach((option, index) => {
+      option.addEventListener('click', () => this.selectStation(index));
+    });
+    
+    
+    // Listen for global radio state changes
+    window.addEventListener('radioStateChanged', (e) => {
+      this.handleGlobalStateChange(e.detail);
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === ' ' && e.ctrlKey) {
+        e.preventDefault();
+        this.togglePlayPause();
+      }
+    });
+    
+    // Save UI state before page unload
+    window.addEventListener('beforeunload', () => {
+      this.saveSettings();
+    });
+  }
+  
+  handleGlobalStateChange(state) {
+    this.isPlaying = state.isPlaying;
+    this.currentStation = state.currentStation;
+    this.volume = state.volume;
+    
+    if (this.isPlaying) {
+      this.startLogoAnimation();
+      this.updateStatus('Click to maximize');
+    } else {
+      this.stopLogoAnimation();
+      this.updateStatus('Click to maximize');
+    }
+    
+    this.updateUI();
+  }
+  
+  togglePlayPause() {
+    this.globalAudio.togglePlayPause();
+  }
+  
+  selectStation(stationIndex) {
+    if (stationIndex === this.currentStation) return;
+    
+    // Always start playing when selecting a new station
+    this.globalAudio.selectStation(stationIndex);
+    
+    // If not already playing, start playback
+    if (!this.isPlaying) {
+      this.globalAudio.togglePlayPause();
+    }
+  }
+  
+  toggleExpanded() {
+    this.isExpanded = !this.isExpanded;
+    this.saveSettings();
+    this.updateUI();
+  }
+  
+  
+  startLogoAnimation() {
+    const logoIcons = document.querySelectorAll('#logo-icon, #logo-icon-expanded');
+    
+    logoIcons.forEach(icon => {
+      icon.style.animation = 'subtleRotate 8s linear infinite';
+    });
+  }
+  
+  stopLogoAnimation() {
+    const logoIcons = document.querySelectorAll('#logo-icon, #logo-icon-expanded');
+    
+    logoIcons.forEach(icon => {
+      icon.style.animation = '';
+    });
+  }
+  
+  updateUI() {
+    // Toggle expanded/minimized view
+    const minimized = document.getElementById('radio-minimized');
+    const expanded = document.getElementById('radio-expanded');
+    
+    if (this.isExpanded) {
+      minimized.classList.add('hidden');
+      expanded.classList.remove('hidden');
+    } else {
+      minimized.classList.remove('hidden');
+      expanded.classList.add('hidden');
+    }
+    
+    // Update play/pause buttons
+    const playIcons = document.querySelectorAll('#play-icon, #play-icon-main');
+    const pauseIcons = document.querySelectorAll('#pause-icon, #pause-icon-main');
+    
+    if (this.isPlaying) {
+      playIcons.forEach(icon => icon.classList.add('hidden'));
+      pauseIcons.forEach(icon => icon.classList.remove('hidden'));
+      this.startLogoAnimation();
+    } else {
+      playIcons.forEach(icon => icon.classList.remove('hidden'));
+      pauseIcons.forEach(icon => icon.classList.add('hidden'));
+      this.stopLogoAnimation();
+    }
+    
+    // Update station info
+    const stations = this.globalAudio.stations;
+    const station = stations[this.currentStation];
+    document.getElementById('current-station').textContent = station.name;
+    
+    // Update volume display
+    const volumeValue = Math.round(this.volume * 100);
+    document.getElementById('volume-slider').value = volumeValue;
+    document.getElementById('volume-display').textContent = volumeValue + '%';
+    this.updateVolumeSliderBackground(volumeValue);
+    
+    this.updateStationUI();
+  }
+  
+  updateStationUI() {
+    document.querySelectorAll('.station-option').forEach((option, index) => {
+      const container = option.querySelector('div');
+      const dot = option.querySelector('.w-3.h-3');
+      
+      if (index === this.currentStation) {
+        option.classList.add('selected');
+        container.classList.remove('bg-gray-50', 'border-gray-200');
+        container.classList.add('bg-purple-50', 'border-purple-200');
+        dot.classList.remove('bg-gray-400');
+        dot.classList.add('bg-purple-600');
+      } else {
+        option.classList.remove('selected');
+        container.classList.remove('bg-purple-50', 'border-purple-200');
+        container.classList.add('bg-gray-50', 'border-gray-200');
+        dot.classList.remove('bg-purple-600');
+        dot.classList.add('bg-gray-400');
+      }
+    });
+  }
+  
+  updateStatus(status) {
+    document.getElementById('radio-status').textContent = status;
+  }
+  
+  updateVolumeSliderBackground(value) {
+    const slider = document.getElementById('volume-slider');
+    const percentage = value;
+    slider.style.background = `linear-gradient(to right, #9333ea 0%, #9333ea ${percentage}%, #e5e7eb ${percentage}%, #e5e7eb 100%)`;
+  }
+  
+  handleAudioError(error) {
+    console.error('Audio error:', error);
+    this.updateStatus('Station offline');
+    this.stopVinylAnimation();
+    this.updateUI();
+  }
+}
+
+// Initialize the radio player when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+  new LoFiRadioPlayer();
+});
+
+// Also initialize on astro:page-load for view transitions
+document.addEventListener('astro:page-load', () => {
+  // Only initialize if not already initialized
+  if (!window.lofiRadioPlayerInstance) {
+    window.lofiRadioPlayerInstance = new LoFiRadioPlayer();
+  }
+});
+</script>
+
+<style>
+  @keyframes subtleRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  /* Custom slider styles */
+  .slider {
+    -webkit-appearance: none;
+    background: linear-gradient(to right, #9333ea 0%, #9333ea 50%, #e5e7eb 50%, #e5e7eb 100%);
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #9333ea;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #9333ea;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  /* Scrollbar styles */
+  .station-option::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .station-option::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px;
+  }
+  
+  .station-option::-webkit-scrollbar-thumb {
+    background: #9333ea;
+    border-radius: 2px;
+  }
+  
+  .station-option::-webkit-scrollbar-thumb:hover {
+    background: #7c3aed;
+  }
+  
+  /* Focus mode transition */
+  #lofi-radio-player {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* Hover effects */
+  #lofi-radio-player:hover {
+    transform: translateY(-2px);
+  }
+  
+  #lofi-radio-player.focus-mode {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    #lofi-radio-player {
+      bottom: 1rem;
+      right: 1rem;
+      max-width: calc(100vw - 2rem);
+    }
+    
+    #radio-expanded {
+      width: 280px;
+    }
+  }
+</style>

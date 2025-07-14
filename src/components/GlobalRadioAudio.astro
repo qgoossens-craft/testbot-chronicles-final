@@ -1,0 +1,321 @@
+---
+// Global Radio Audio - Persistent across page navigations
+---
+
+<script>
+// Global audio management system - persistent across page navigations
+window.globalRadioAudio = window.globalRadioAudio || {
+  audio: null,
+  isInitialized: false,
+  currentStation: 0,
+  isPlaying: false,
+  volume: 0.5,
+  currentTime: 0,
+  stations: [
+    {
+      name: "LoFi Hip Hop",
+      url: "https://streams.ilovemusic.de/iloveradio17.mp3",
+      genre: "Chill beats for focus",
+      fallback: "https://radio.streemlion.com:2199/tunein/chillout.pls"
+    },
+    {
+      name: "ChillHop",
+      url: "https://streams.fluxfm.de/Chillhop/mp3-320/",
+      genre: "Smooth instrumental",
+      fallback: "https://streams.ilovemusic.de/iloveradio17.mp3"
+    }
+  ],
+  
+  init() {
+    // Check if audio element already exists (prevents recreation)
+    const existingAudio = document.getElementById('global-radio-audio');
+    if (existingAudio && this.isInitialized) {
+      this.audio = existingAudio;
+      this.syncExistingAudio();
+      return;
+    }
+    
+    // Create persistent audio element only if it doesn't exist
+    if (!existingAudio) {
+      this.audio = document.createElement('audio');
+      this.audio.id = 'global-radio-audio';
+      this.audio.preload = 'none';
+      this.audio.crossOrigin = 'anonymous';
+      
+      // Hide the audio element but keep it in DOM
+      this.audio.style.display = 'none';
+      document.body.appendChild(this.audio);
+    } else {
+      this.audio = existingAudio;
+    }
+    
+    // Load saved settings
+    this.loadSettings();
+    
+    // Set up event listeners
+    this.setupGlobalEvents();
+    
+    this.isInitialized = true;
+    
+    // Resume playback if it was playing before navigation
+    if (this.shouldAutoResume()) {
+      this.resumePlayback();
+    }
+  },
+  
+  syncExistingAudio() {
+    // Sync current state with existing audio element
+    if (this.audio) {
+      this.isPlaying = !this.audio.paused;
+      this.volume = this.audio.volume;
+      this.currentTime = this.audio.currentTime;
+      
+      // Notify UI of current state
+      this.notifyUIUpdate();
+    }
+  },
+  
+  resumePlayback() {
+    if (!this.audio) return;
+    
+    const station = this.stations[this.currentStation];
+    
+    // Only load station if source is different or audio is not ready
+    if (this.audio.src !== station.url || this.audio.readyState === 0) {
+      this.loadStation(this.currentStation, true);
+    } else if (this.isPlaying) {
+      // If audio is ready and should be playing, just resume
+      this.play();
+    }
+  },
+  
+  loadSettings() {
+    const savedVolume = localStorage.getItem('lofi-radio-volume');
+    const savedStation = localStorage.getItem('lofi-radio-station');
+    const savedPlaying = localStorage.getItem('lofi-radio-playing');
+    const savedTime = sessionStorage.getItem('lofi-radio-time');
+    
+    if (savedVolume !== null) {
+      this.volume = parseFloat(savedVolume);
+    }
+    
+    if (savedStation !== null) {
+      this.currentStation = parseInt(savedStation);
+    }
+    
+    if (savedPlaying === 'true') {
+      this.isPlaying = true;
+    }
+    
+    if (savedTime !== null) {
+      this.currentTime = parseFloat(savedTime);
+    }
+    
+    if (this.audio) {
+      this.audio.volume = this.volume;
+    }
+  },
+  
+  saveSettings() {
+    localStorage.setItem('lofi-radio-volume', this.volume.toString());
+    localStorage.setItem('lofi-radio-station', this.currentStation.toString());
+    localStorage.setItem('lofi-radio-playing', this.isPlaying.toString());
+    
+    // Save current time to session storage for quick resume
+    if (this.audio && this.audio.currentTime) {
+      sessionStorage.setItem('lofi-radio-time', this.audio.currentTime.toString());
+    }
+  },
+  
+  shouldAutoResume() {
+    return localStorage.getItem('lofi-radio-playing') === 'true';
+  },
+  
+  setupGlobalEvents() {
+    if (!this.audio) return;
+    
+    // Remove existing event listeners to prevent duplicates
+    this.audio.removeEventListener('play', this.handlePlay);
+    this.audio.removeEventListener('pause', this.handlePause);
+    this.audio.removeEventListener('error', this.handleError);
+    this.audio.removeEventListener('timeupdate', this.handleTimeUpdate);
+    
+    // Bind event handlers to maintain 'this' context
+    this.handlePlay = () => {
+      this.isPlaying = true;
+      this.saveSettings();
+      this.notifyUIUpdate();
+    };
+    
+    this.handlePause = () => {
+      this.isPlaying = false;
+      this.saveSettings();
+      this.notifyUIUpdate();
+    };
+    
+    this.handleError = (e) => {
+      console.error('Global audio error:', e);
+      this.isPlaying = false;
+      this.saveSettings();
+      this.notifyUIUpdate();
+    };
+    
+    this.handleTimeUpdate = () => {
+      if (this.audio && this.audio.currentTime) {
+        this.currentTime = this.audio.currentTime;
+        // Save time periodically for resume capability
+        if (Math.floor(this.currentTime) % 5 === 0) {
+          sessionStorage.setItem('lofi-radio-time', this.currentTime.toString());
+        }
+      }
+    };
+    
+    // Add event listeners
+    this.audio.addEventListener('play', this.handlePlay);
+    this.audio.addEventListener('pause', this.handlePause);
+    this.audio.addEventListener('error', this.handleError);
+    this.audio.addEventListener('timeupdate', this.handleTimeUpdate);
+    
+    // Save state before page unload
+    window.addEventListener('beforeunload', () => {
+      this.saveSettings();
+    });
+    
+    // Handle page visibility changes
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        this.saveSettings();
+      }
+    });
+  },
+  
+  async loadStation(stationIndex, autoPlay = false) {
+    if (!this.audio) return;
+    
+    const station = this.stations[stationIndex];
+    this.currentStation = stationIndex;
+    
+    try {
+      // Only change source if different station
+      if (this.audio.src !== station.url) {
+        this.audio.src = station.url;
+        this.audio.load();
+      }
+      
+      this.saveSettings();
+      this.notifyUIUpdate();
+      
+      if (autoPlay && this.shouldAutoResume()) {
+        // Wait for audio to be ready before playing
+        const playWhenReady = () => {
+          if (this.audio.readyState >= 2) {
+            this.play();
+          } else {
+            setTimeout(playWhenReady, 100);
+          }
+        };
+        playWhenReady();
+      }
+      
+    } catch (error) {
+      console.error('Error loading station:', error);
+      this.tryFallback(station);
+    }
+  },
+  
+  tryFallback(station) {
+    if (station.fallback && station.fallback !== station.url) {
+      this.audio.src = station.fallback;
+      this.audio.load();
+    }
+  },
+  
+  async play() {
+    if (!this.audio) return;
+    
+    try {
+      await this.audio.play();
+      this.isPlaying = true;
+      this.saveSettings();
+      this.notifyUIUpdate();
+    } catch (error) {
+      console.error('Error playing audio:', error);
+      this.handleError();
+    }
+  },
+  
+  pause() {
+    if (!this.audio) return;
+    
+    this.audio.pause();
+    this.isPlaying = false;
+    this.saveSettings();
+    this.notifyUIUpdate();
+  },
+  
+  setVolume(volume) {
+    this.volume = volume;
+    if (this.audio) {
+      this.audio.volume = volume;
+    }
+    this.saveSettings();
+    this.notifyUIUpdate();
+  },
+  
+  handleStreamError() {
+    this.isPlaying = false;
+    this.saveSettings();
+    this.notifyUIUpdate();
+  },
+  
+  notifyUIUpdate() {
+    // Dispatch custom event to update UI components
+    window.dispatchEvent(new CustomEvent('radioStateChanged', {
+      detail: {
+        isPlaying: this.isPlaying,
+        currentStation: this.currentStation,
+        volume: this.volume,
+        stations: this.stations
+      }
+    }));
+  },
+  
+  // Public API for UI components
+  togglePlayPause() {
+    if (this.isPlaying) {
+      this.pause();
+    } else {
+      this.play();
+    }
+  },
+  
+  selectStation(stationIndex) {
+    if (stationIndex === this.currentStation) return;
+    
+    // Always play when selecting a new station
+    this.loadStation(stationIndex, true);
+  },
+  
+  getCurrentState() {
+    return {
+      isPlaying: this.isPlaying,
+      currentStation: this.currentStation,
+      volume: this.volume,
+      stations: this.stations
+    };
+  }
+};
+
+// Initialize on DOM load
+document.addEventListener('DOMContentLoaded', () => {
+  window.globalRadioAudio.init();
+});
+
+// Also initialize on astro:page-load for view transitions
+document.addEventListener('astro:page-load', () => {
+  // Re-initialize if needed (shouldn't be needed with view transitions)
+  if (!window.globalRadioAudio.isInitialized) {
+    window.globalRadioAudio.init();
+  }
+});
+</script>
