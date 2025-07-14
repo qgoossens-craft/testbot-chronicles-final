@@ -12,6 +12,7 @@ draft: false  # Set to true to hide from published posts
 
 
 ![python logo](https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Python.svg/800px-Python.svg.png)
+
 ## What Are Comments?
 
 *Comments* are notes we leave in our code that Python will ignore when running the program. They're like sticky notes we put in our code to help ourselves and others understand what's happening.

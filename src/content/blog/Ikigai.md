@@ -1,13 +1,15 @@
 ---
 title: 'ikigai'
-description: 'A brief description of your post (used for SEO and previews)'
+description: 'A brief explanation of what the japanese Ikigai is about'
 pubDate: 2025-07-14
 updatedDate: 2025-07-14  # Optional - only add if you update the post
-heroImage: 'https://shorturl.at/BkYTz'  # Optional - blog post header image
-tags: ['tag1', 'tag2', 'tag3']  # Add relevant tags
+heroImage: 'images/blog/ikigai/ikigai.png'  # Optional - blog post header image
+tags: ['concepts', 'personal development', 'philosophy']  # Add relevant tags
 category: 'Personal Development'
 draft: false  # Set to true to hide from published posts
 ---
+
+![ikigai representation](/images/blog/ikigai/ikigai.png)
 
 L'Ikigai est un concept japonais qui peut se traduire par "raison d'être" ou "raison de vivre". Il représente l'intersection de quatre éléments fondamentaux :
 
