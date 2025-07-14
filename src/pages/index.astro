@@ -4,13 +4,22 @@ export const prerender = true;
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import InteractiveTerminal from '../components/InteractiveTerminal.astro';
+import AdaptiveCard from '../components/AdaptiveCard.astro';
+import { calculateReadingTime } from '../utils/readingTime';
 
 // Get recent blog posts (latest 3)
 const allPosts = await getCollection('blog');
-const recentPosts = allPosts
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+const recentPosts = await Promise.all(
+  allPosts
+    .filter(post => !post.data.draft)
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .slice(0, 3)
+    .map(async (post) => {
+      const { Content } = await post.render();
+      const readingTime = calculateReadingTime(post.body);
+      return { ...post, readingTime };
+    })
+);
 
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', {
@@ -63,7 +72,7 @@ function formatDate(date: Date) {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
       <div class="text-center mb-12">
         <h2 class="text-4xl font-bold text-gray-900 mb-4">About Me</h2>
-        <p class="text-xl text-gray-600">Freelance QA Engineer delivering robust software through strategic test automation and intelligent quality assurance.</p>
+        <p class="text-xl text-gray-600">Freelance QA Engineer and Tech enabler delivering robust software through strategic test automation and intelligent quality assurance.</p>
       </div>
       
       <div class="grid md:grid-cols-2 gap-12 items-start">
@@ -243,43 +252,7 @@ function formatDate(date: Date) {
         <div>
           <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {recentPosts.map((post) => (
-              <article class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100">
-                <div class="p-6">
-                  <div class="text-sm text-gray-500 mb-4">
-                    {formatDate(post.data.pubDate)}
-                  </div>
-                  
-                  <h3 class="text-xl font-bold text-gray-900 mb-4 line-clamp-2">
-                    <a href={`/blog/${post.slug}/`} class="hover:text-blue-600 transition-colors">
-                      {post.data.title}
-                    </a>
-                  </h3>
-                  
-                  <p class="text-gray-600 mb-4 line-clamp-3">
-                    {post.data.description}
-                  </p>
-                  
-                  {post.data.tags && post.data.tags.length > 0 ? (
-                    <div class="flex flex-wrap gap-2 mb-4">
-                      {post.data.tags.slice(0, 2).map((tag) => (
-                        <span class="inline-block bg-terminal-bg/10 text-terminal-green text-sm font-mono px-2 py-1 rounded">
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  ) : null}
-                  
-                  <a 
-                    href={`/blog/${post.slug}/`}
-                    class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm"
-                  >
-                    Read more
-                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                  </a>
-                </div>
-              </article>
+              <AdaptiveCard post={post} readingTime={post.readingTime} />
             ))}
           </div>
           

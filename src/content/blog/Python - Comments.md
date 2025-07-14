@@ -5,7 +5,7 @@ pubDate: 2025-07-14
 updatedDate: 2025-07-14   # Optional - only add if you update the post
 heroImage: 'images/blog/python/errors/python.png'  # Optional - blog post header image
 tags: ['python', 'code', 'learn']  # Add relevant tags
-category: 'Programming'
+category: 'programming'
 draft: false  # Set to true to hide from published posts
 ---
 

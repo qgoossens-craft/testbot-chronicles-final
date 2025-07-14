@@ -4,7 +4,7 @@ description: 'Introducing TestBot Chronicles - where testing meets innovation an
 pubDate: 2025-07-14
 updatedDate: 2025-07-14 
 heroImage : 'images/blog/chronicles/titus.png'
-tags: ['introduction', 'testing', 'automation', 'quality-assurance']
+tags: ['introduction', 'testing', 'automation']
 category: 'Introduction'
 ---
 
