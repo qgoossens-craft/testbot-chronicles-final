@@ -74,6 +74,33 @@ npx playwright test
 > Important insight or quote goes here.
 > This is useful for highlighting key takeaways.
 
+## Images
+
+### Simple Images (Copy directly from Obsidian)
+```markdown
+![Alt text](/images/your-image.jpg)
+```
+
+### Simple Images
+Just use standard markdown syntax with images in `/public/images/`:
+```markdown
+![Alt text](/images/your-image.jpg)
+```
+
+### Advanced Styling (Optional)
+For centered or styled images, use HTML directly in your markdown:
+
+```html
+<div class="text-center my-8">
+  <img src="/images/your-image.jpg" alt="Description" class="mx-auto max-w-md rounded-lg shadow-lg" />
+</div>
+```
+
+**Important:** 
+- Always place images in `/public/images/` folder
+- Use `/images/filename.ext` format in markdown
+- The conversion script handles Obsidian `![[image.png]]` syntax automatically
+
 ## Final Thoughts
 
 Wrap up your post with key takeaways and next steps.
