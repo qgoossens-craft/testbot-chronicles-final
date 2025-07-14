@@ -26,10 +26,10 @@ jobs:
         run: |
           rm -rf node_modules package-lock.json
           npm cache clean --force
-          npm install
+          npm install --ignore-platform-reqs
           
-      - name: Install platform-specific Rollup
-        run: npm install @rollup/rollup-linux-x64-gnu
+      - name: Install Linux-specific Rollup
+        run: npm install @rollup/rollup-linux-x64-gnu --ignore-platform-reqs
           
       - name: Build site
         run: npm run build
