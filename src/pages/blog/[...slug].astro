@@ -3,6 +3,7 @@ export const prerender = true;
 
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
 import { calculateReadingTime, formatReadingTime } from '../../utils/readingTime';
 
 export async function getStaticPaths() {
@@ -16,7 +17,7 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
 const readingTime = calculateReadingTime(post.body);
 
 function formatDate(date: Date) {
@@ -116,9 +117,22 @@ function formatDate(date: Date) {
       </div>
     </header>
 
+    <!-- Table of Contents - Desktop Fixed Left -->
+    <div class="hidden lg:block">
+      <TableOfContents headings={headings} />
+    </div>
+    
     <!-- Article Content -->
-    <div class="prose prose-lg prose-slate mx-auto max-w-4xl">
-      <Content />
+    <div class="max-w-4xl mx-auto relative">
+      <!-- Table of Contents - Mobile (sticky at top of content) -->
+      <div class="lg:hidden mb-8">
+        <TableOfContents headings={headings} />
+      </div>
+      
+      <!-- Article Content -->
+      <div class="prose prose-lg prose-slate mx-auto relative z-10">
+        <Content />
+      </div>
     </div>
     
     <!-- Article Footer -->
