@@ -40,3 +40,6 @@ Thumbs.db
 
 # Admin backup (temporarily moved for static build)
 admin-backup/
+
+# Netlify build files (not needed for GitHub Pages)
+.netlify/
