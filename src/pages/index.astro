@@ -28,7 +28,7 @@ function formatDate(date: Date) {
     <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900"></div>
     
     <!-- Grid pattern overlay -->
-    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse"%3E%3Cpath d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100%25" height="100%25" fill="url(%23grid)"/%3E%3C/svg%3E')]"></div>
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cdefs%3E%3Cpattern id=%22grid%22 width=%2260%22 height=%2260%22 patternUnits=%22userSpaceOnUse%22%3E%3Cpath d=%22M 60 0 L 0 0 0 60%22 fill=%22none%22 stroke=%22rgba(255,255,255,0.03)%22 stroke-width=%221%22/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22url(%23grid)%22/%3E%3C/svg%3E')]"></div>
     
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
       <div class="text-center">
@@ -42,7 +42,7 @@ function formatDate(date: Date) {
           Crafting Quality through intelligent testing
         </p>
         <div class="space-x-4 animate-fade-up" style="animation-delay: 0.2s">
-          <a href="#contact" class="bg-transparent text-white px-8 py-4 rounded-lg border-2 border-white/50 hover:bg-white/10 hover:border-white transition inline-block font-semibold">
+          <a href="/blog" class="bg-transparent text-white px-8 py-4 rounded-lg border-2 border-white/50 hover:bg-white/10 hover:border-white transition inline-block font-semibold">
             Read TestBot Chronicles
           </a>
           <a href="#contact" class="bg-transparent text-white px-8 py-4 rounded-lg border-2 border-white/50 hover:bg-white/10 hover:border-white transition inline-block font-semibold">
@@ -77,8 +77,7 @@ function formatDate(date: Date) {
               <svg class="w-8 h-8 text-blue-600 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
-              <span class="text-gray-700">End-to-end automation strategies that reduce risk
-</span>
+              <span class="text-gray-700">End-to-end automation strategies that reduce risk</span>
             </div>
             <div class="flex items-start">
               <svg class="w-8 h-8 text-blue-600 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,8 +112,7 @@ function formatDate(date: Date) {
                   </svg>
                   <span class="font-medium text-gray-900">50+ Projects</span>
                 </div>
-                <p class="text-sm text-gray-600">Successfully delivered with measurable quality improvements across industries
-</p>
+                <p class="text-sm text-gray-600">Successfully delivered with measurable quality improvements across industries</p>
               </div>
               <div class="bg-gray-50 p-4 rounded-lg">
                 <div class="flex items-center mb-2">
@@ -218,7 +216,6 @@ function formatDate(date: Date) {
                 <li class="flex items-center"><span class="text-rose-600 mr-3">✓</span> QA Team Development Programs</li>
                 <li class="flex items-center"><span class="text-rose-600 mr-3">✓</span> Automation Training Workshops</li>
                 <li class="flex items-center"><span class="text-rose-600 mr-3">✓</span> Technical Mentoring & Coaching</li>
-                
               </ul>
             </div>
           </div>
@@ -262,7 +259,7 @@ function formatDate(date: Date) {
                     {post.data.description}
                   </p>
                   
-                  {post.data.tags && post.data.tags.length > 0 && (
+                  {post.data.tags && post.data.tags.length > 0 ? (
                     <div class="flex flex-wrap gap-2 mb-4">
                       {post.data.tags.slice(0, 2).map((tag) => (
                         <span class="inline-block bg-terminal-bg/10 text-terminal-green text-sm font-mono px-2 py-1 rounded">
@@ -270,7 +267,7 @@ function formatDate(date: Date) {
                         </span>
                       ))}
                     </div>
-                  )}
+                  ) : null}
                   
                   <a 
                     href={`/blog/${post.slug}/`}
@@ -310,7 +307,7 @@ function formatDate(date: Date) {
       <form class="space-y-6" id="contact-form">
         <div class="grid md:grid-cols-2 gap-6">
           <div>
-            <label for="name" class="block text-sm font-medium text-gray-700 mb-4">
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
               Name *
             </label>
             <input
@@ -323,7 +320,7 @@ function formatDate(date: Date) {
             />
           </div>
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-4">
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
               Email *
             </label>
             <input
@@ -338,7 +335,7 @@ function formatDate(date: Date) {
         </div>
         
         <div>
-          <label for="subject" class="block text-sm font-medium text-gray-700 mb-4">
+          <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">
             Subject *
           </label>
           <input
@@ -352,7 +349,7 @@ function formatDate(date: Date) {
         </div>
         
         <div>
-          <label for="message" class="block text-sm font-medium text-gray-700 mb-4">
+          <label for="message" class="block text-sm font-medium text-gray-700 mb-2">
             Message *
           </label>
           <textarea
@@ -378,8 +375,8 @@ function formatDate(date: Date) {
       <div class="mt-12 text-center">
         <p class="text-gray-600">Or reach out directly:</p>
         <p class="mt-2">
-          <a href="mailto:contact@titusconsulting.be" class="text-blue-600 hover:text-blue-700">
-            contact@titusconsulting.be
+          <a href="mailto:quentin@titusconsulting.be" class="text-blue-600 hover:text-blue-700">
+            quentin@titusconsulting.be
           </a>
         </p>
       </div>
