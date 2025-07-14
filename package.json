@@ -4,14 +4,14 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "dev:bypass": "node dev.js",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/netlify": "^5.3.2",
-    "astro": "^4.16.18"
+    "@rollup/rollup-win32-x64-msvc": "^4.45.0",
+    "astro": "^4.16.18",
+    "rollup": "^4.45.0"
   },
   "devDependencies": {
     "@astrojs/tailwind": "^6.0.2",
