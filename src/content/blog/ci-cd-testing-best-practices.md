@@ -3,6 +3,7 @@ title: 'CI/CD Testing Best Practices: Building Quality into Your Pipeline'
 description: 'Essential strategies for integrating comprehensive testing into your CI/CD pipeline, ensuring quality at every deployment.'
 pubDate: 2024-01-25
 tags: ['ci-cd', 'automation', 'devops', 'testing-strategy', 'quality-gates']
+category: 'CI/CD & DevOps'
 ---
 
 # CI/CD Testing Best Practices: Building Quality into Your Pipeline

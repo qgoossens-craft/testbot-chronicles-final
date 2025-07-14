@@ -88,6 +88,14 @@ function formatDate(date: Date) {
                     </span>
                   </div>
                   
+                  {post.data.category && (
+                    <div class="mb-3">
+                      <span class="post-category inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded-md border border-blue-200">
+                        {post.data.category}
+                      </span>
+                    </div>
+                  )}
+                  
                   <h2 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
                     <a href={`/blog/${post.slug}/`} class="hover:underline">
                       {post.data.title}

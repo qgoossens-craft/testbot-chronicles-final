@@ -20,8 +20,17 @@
     </div>
   </div>
 
+  <!-- Category Filter -->
+  <div class="mb-6">
+    <h3 class="text-sm font-semibold text-gray-700 mb-3">Categories</h3>
+    <div class="flex flex-wrap gap-2" id="category-filters">
+      <!-- Categories will be populated by JavaScript -->
+    </div>
+  </div>
+
   <!-- Tag Filter -->
   <div class="mb-6">
+    <h3 class="text-sm font-semibold text-gray-700 mb-3">Tags</h3>
     <div class="flex flex-wrap gap-2" id="tag-filters">
       <!-- Tags will be populated by JavaScript -->
     </div>
@@ -36,41 +45,62 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search-input');
+    const categoryFilters = document.getElementById('category-filters');
     const tagFilters = document.getElementById('tag-filters');
     const resultsCount = document.getElementById('results-count');
     const blogPosts = document.querySelectorAll('.blog-post-card');
     
     let allPosts = [];
+    let allCategories = new Set();
     let allTags = new Set();
-    let activeFilters = new Set();
+    let activeCategoryFilters = new Set();
+    let activeTagFilters = new Set();
     
     // Initialize posts data
     blogPosts.forEach((post, index) => {
       const title = post.querySelector('h2').textContent.toLowerCase();
       const description = post.querySelector('.post-description').textContent.toLowerCase();
       const tags = Array.from(post.querySelectorAll('.post-tag')).map(tag => tag.textContent.replace('#', '').toLowerCase());
+      const categoryElement = post.querySelector('.post-category');
+      const category = categoryElement ? categoryElement.textContent.toLowerCase() : null;
       
       allPosts.push({
         element: post,
         title,
         description,
         tags,
-        searchText: title + ' ' + description + ' ' + tags.join(' ')
+        category,
+        searchText: title + ' ' + description + ' ' + tags.join(' ') + (category ? ' ' + category : '')
       });
       
       tags.forEach(tag => allTags.add(tag));
+      if (category) allCategories.add(category);
     });
+    
+    // Create category filter buttons
+    function createCategoryFilters() {
+      categoryFilters.innerHTML = '';
+      
+      // All button
+      const allButton = document.createElement('button');
+      allButton.textContent = 'All Categories';
+      allButton.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-blue-600 text-white border border-blue-600';
+      allButton.onclick = () => clearFilters();
+      categoryFilters.appendChild(allButton);
+      
+      // Category buttons
+      Array.from(allCategories).sort().forEach(category => {
+        const button = document.createElement('button');
+        button.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+        button.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-white text-gray-700 border border-gray-300 hover:bg-gray-50';
+        button.onclick = () => toggleCategoryFilter(category, button);
+        categoryFilters.appendChild(button);
+      });
+    }
     
     // Create tag filter buttons
     function createTagFilters() {
       tagFilters.innerHTML = '';
-      
-      // All button
-      const allButton = document.createElement('button');
-      allButton.textContent = 'All';
-      allButton.className = 'px-3 py-1 rounded-full text-sm font-medium transition-colors bg-blue-100 text-blue-800 border border-blue-200';
-      allButton.onclick = () => clearFilters();
-      tagFilters.appendChild(allButton);
       
       // Tag buttons
       Array.from(allTags).sort().forEach(tag => {
@@ -82,45 +112,73 @@
       });
     }
     
+    // Toggle category filter
+    function toggleCategoryFilter(category, button) {
+      // Clear all category filters first (single selection)
+      activeCategoryFilters.clear();
+      
+      // Add the new category
+      activeCategoryFilters.add(category);
+      
+      updateAllButtons();
+      updateCategoryButtons();
+      filterPosts();
+    }
+    
     // Toggle tag filter
     function toggleTagFilter(tag, button) {
-      if (activeFilters.has(tag)) {
-        activeFilters.delete(tag);
+      if (activeTagFilters.has(tag)) {
+        activeTagFilters.delete(tag);
         button.className = 'px-3 py-1 rounded-full text-sm font-medium transition-colors bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200';
       } else {
-        activeFilters.add(tag);
+        activeTagFilters.add(tag);
         button.className = 'px-3 py-1 rounded-full text-sm font-medium transition-colors bg-blue-100 text-blue-800 border border-blue-200';
       }
       
-      updateAllButton();
+      updateAllButtons();
       filterPosts();
     }
     
     // Clear all filters
     function clearFilters() {
-      activeFilters.clear();
+      activeCategoryFilters.clear();
+      activeTagFilters.clear();
       searchInput.value = '';
-      updateAllButton();
+      updateAllButtons();
+      updateCategoryButtons();
       updateTagButtons();
       filterPosts();
     }
     
-    // Update All button state
-    function updateAllButton() {
-      const allButton = tagFilters.querySelector('button');
-      if (activeFilters.size === 0 && !searchInput.value.trim()) {
-        allButton.className = 'px-3 py-1 rounded-full text-sm font-medium transition-colors bg-blue-100 text-blue-800 border border-blue-200';
+    // Update All button states
+    function updateAllButtons() {
+      const categoryAllButton = categoryFilters.querySelector('button');
+      if (activeCategoryFilters.size === 0 && activeTagFilters.size === 0 && !searchInput.value.trim()) {
+        categoryAllButton.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-blue-600 text-white border border-blue-600';
       } else {
-        allButton.className = 'px-3 py-1 rounded-full text-sm font-medium transition-colors bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200';
+        categoryAllButton.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-white text-gray-700 border border-gray-300 hover:bg-gray-50';
       }
+    }
+    
+    // Update category button states
+    function updateCategoryButtons() {
+      const buttons = categoryFilters.querySelectorAll('button:not(:first-child)');
+      buttons.forEach(button => {
+        const category = button.textContent.toLowerCase();
+        if (activeCategoryFilters.has(category)) {
+          button.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-blue-600 text-white border border-blue-600';
+        } else {
+          button.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-white text-gray-700 border border-gray-300 hover:bg-gray-50';
+        }
+      });
     }
     
     // Update tag button states
     function updateTagButtons() {
-      const buttons = tagFilters.querySelectorAll('button:not(:first-child)');
+      const buttons = tagFilters.querySelectorAll('button');
       buttons.forEach(button => {
         const tag = button.textContent.replace('#', '').toLowerCase();
-        if (activeFilters.has(tag)) {
+        if (activeTagFilters.has(tag)) {
           button.className = 'px-3 py-1 rounded-full text-sm font-medium transition-colors bg-blue-100 text-blue-800 border border-blue-200';
         } else {
           button.className = 'px-3 py-1 rounded-full text-sm font-medium transition-colors bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200';
@@ -128,7 +186,7 @@
       });
     }
     
-    // Filter posts based on search and tag filters
+    // Filter posts based on search, category, and tag filters
     function filterPosts() {
       const searchTerm = searchInput.value.toLowerCase().trim();
       let visibleCount = 0;
@@ -141,9 +199,19 @@
           matches = false;
         }
         
+        // Check category filters
+        if (activeCategoryFilters.size > 0) {
+          const hasActiveCategory = Array.from(activeCategoryFilters).some(filter => 
+            post.category === filter
+          );
+          if (!hasActiveCategory) {
+            matches = false;
+          }
+        }
+        
         // Check tag filters
-        if (activeFilters.size > 0) {
-          const hasActiveTag = Array.from(activeFilters).some(filter => 
+        if (activeTagFilters.size > 0) {
+          const hasActiveTag = Array.from(activeTagFilters).some(filter => 
             post.tags.includes(filter)
           );
           if (!hasActiveTag) {
@@ -169,11 +237,12 @@
     
     // Search input event listener
     searchInput.addEventListener('input', function() {
-      updateAllButton();
+      updateAllButtons();
       filterPosts();
     });
     
     // Initialize
+    createCategoryFilters();
     createTagFilters();
     filterPosts();
   });

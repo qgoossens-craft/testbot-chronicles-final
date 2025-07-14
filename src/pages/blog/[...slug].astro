@@ -28,7 +28,14 @@ function formatDate(date: Date) {
 }
 ---
 
-<BaseLayout title={post.data.title}>
+<BaseLayout 
+  title={post.data.title}
+  description={post.data.description}
+  category={post.data.category}
+  tags={post.data.tags}
+  pubDate={post.data.pubDate}
+  type="article"
+>
   <!-- Article Header -->
   <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <!-- Navigation breadcrumb -->
@@ -86,6 +93,17 @@ function formatDate(date: Date) {
           )}
         </div>
         
+        {post.data.category && (
+          <div class="flex justify-center mb-6">
+            <span class="inline-block bg-blue-50 text-blue-700 text-sm font-semibold px-4 py-2 rounded-lg border border-blue-200">
+              <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+              </svg>
+              {post.data.category}
+            </span>
+          </div>
+        )}
+        
         {post.data.tags && post.data.tags.length > 0 && (
           <div class="flex flex-wrap justify-center gap-2">
             {post.data.tags.map((tag) => (
@@ -99,7 +117,7 @@ function formatDate(date: Date) {
     </header>
 
     <!-- Article Content -->
-    <div class="prose prose-lg prose-slate mx-auto">
+    <div class="prose prose-lg prose-slate mx-auto max-w-4xl">
       <Content />
     </div>
     
@@ -136,100 +154,3 @@ function formatDate(date: Date) {
   </article>
 </BaseLayout>
 
-<style>
-  /* Custom prose styles for better readability */
-  .prose {
-    color: #374151;
-    max-width: none;
-  }
-  
-  .prose h1, .prose h2, .prose h3, .prose h4 {
-    color: #1f2937;
-    font-weight: 700;
-  }
-  
-  .prose h2 {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid #e5e7eb;
-  }
-  
-  .prose h3 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-    color: #4f46e5;
-  }
-  
-  .prose code {
-    background-color: #f3f4f6;
-    padding: 0.125rem 0.25rem;
-    border-radius: 0.25rem;
-    font-size: 0.875em;
-    color: #dc2626;
-    font-weight: 600;
-  }
-  
-  .prose pre {
-    background-color: #1f2937;
-    color: #f9fafb;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    overflow-x: auto;
-    margin: 1.5rem 0;
-  }
-  
-  .prose pre code {
-    background-color: transparent;
-    color: inherit;
-    padding: 0;
-    border-radius: 0;
-    font-weight: normal;
-  }
-  
-  .prose blockquote {
-    border-left: 4px solid #4f46e5;
-    background-color: #f8fafc;
-    padding: 1rem 1.5rem;
-    margin: 1.5rem 0;
-    font-style: italic;
-  }
-  
-  .prose table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1.5rem 0;
-  }
-  
-  .prose th, .prose td {
-    border: 1px solid #e5e7eb;
-    padding: 0.75rem;
-    text-align: left;
-  }
-  
-  .prose th {
-    background-color: #f9fafb;
-    font-weight: 600;
-  }
-  
-  .prose a {
-    color: #2563eb;
-    text-decoration: underline;
-    text-decoration-color: #93c5fd;
-    text-underline-offset: 2px;
-  }
-  
-  .prose a:hover {
-    color: #1d4ed8;
-    text-decoration-color: #2563eb;
-  }
-  
-  .prose ul, .prose ol {
-    margin: 1rem 0;
-    padding-left: 1.5rem;
-  }
-  
-  .prose li {
-    margin: 0.5rem 0;
-  }
-</style>
