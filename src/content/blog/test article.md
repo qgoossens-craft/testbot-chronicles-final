@@ -1,9 +1,11 @@
 ---
 title: "Test Article 4"
 pubDate: 2025-07-14
+updatedDate: 2025-07-14 
 description: "A test article"
 tags: ["test", "something"]
 category: 'Testing'
+draft: false
 ---
 
 # Mon contenu ici...

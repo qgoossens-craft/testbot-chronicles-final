@@ -119,8 +119,8 @@ function formatDate(date: Date) {
                   {post.data.tags && post.data.tags.length > 0 && (
                     <div class="flex flex-wrap gap-2 mb-4">
                       {post.data.tags.slice(0, 3).map((tag) => (
-                        <span class="post-tag inline-block bg-terminal-bg/10 text-terminal-green text-xs font-mono px-2 py-1 rounded">
-                          #{tag}
+                        <span class="post-tag inline-block bg-blue-100 text-blue-700 text-xs font-medium px-2 py-1 rounded">
+                          {tag}
                         </span>
                       ))}
                       {post.data.tags.length > 3 && (

@@ -1,10 +1,10 @@
 ---
 title: 'Python comments'
-description: 'A brief description of your post (used for SEO and previews)'
-pubDate: 2024-01-30
-updatedDate: 2024-01-30  # Optional - only add if you update the post
+description: 'A brief overview of Python comments'
+pubDate: 2025-07-14
+updatedDate: 2025-07-14   # Optional - only add if you update the post
 heroImage: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Python.svg/800px-Python.svg.png'  # Optional - blog post header image
-tags: ['tag1', 'tag2', 'tag3']  # Add relevant tags
+tags: ['python', 'code', 'learn']  # Add relevant tags
 draft: false  # Set to true to hide from published posts
 ---
 

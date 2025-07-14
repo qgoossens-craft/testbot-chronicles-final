@@ -1,7 +1,8 @@
 ---
 title: 'Playwright vs Cypress: A Practical Comparison'
 description: 'An in-depth comparison of Playwright and Cypress for modern web testing, based on real-world project experience.'
-pubDate: 2024-01-20
+pubDate: 2025-07-14
+updatedDate: 2025-07-14 
 tags: ['playwright', 'cypress', 'comparison', 'e2e-testing', 'tools']
 category: 'Testing Tools'
 ---

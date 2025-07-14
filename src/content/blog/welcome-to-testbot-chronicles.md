@@ -1,7 +1,8 @@
 ---
 title: 'Welcome to TestBot Chronicles'
 description: 'Introducing TestBot Chronicles - where testing meets innovation and automation drives quality.'
-pubDate: 2024-01-15
+pubDate: 2025-07-14
+updatedDate: 2025-07-14 
 tags: ['introduction', 'testing', 'automation', 'quality-assurance']
 category: 'Introduction'
 ---
