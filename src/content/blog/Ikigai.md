@@ -5,6 +5,7 @@ pubDate: 2025-07-14
 updatedDate: 2025-07-14  # Optional - only add if you update the post
 heroImage: 'https://shorturl.at/BkYTz'  # Optional - blog post header image
 tags: ['tag1', 'tag2', 'tag3']  # Add relevant tags
+category: 'Personal Development'
 draft: false  # Set to true to hide from published posts
 ---
 

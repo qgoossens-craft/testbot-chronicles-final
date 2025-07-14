@@ -5,6 +5,7 @@ pubDate: 2024-01-30
 updatedDate: 2024-01-30  # Optional - only add if you update the post
 heroImage: '/images/blog/your-image.jpg'  # Optional - blog post header image
 tags: ['tag1', 'tag2', 'tag3']  # Add relevant tags
+category: 'Programming'
 draft: false  # Set to true to hide from published posts
 ---
 
