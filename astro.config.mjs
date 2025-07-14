@@ -5,7 +5,6 @@ import tailwind from '@astrojs/tailwind';
 // https://astro.build/config
 export default defineConfig({
   integrations: [tailwind()],
-  site: 'https://qgoossens-craft.github.io',
-  base: '/testbot-chronicles-final',
+  site: 'https://titusconsulting.be',
   output: 'static', // Static build for GitHub Pages
 });
