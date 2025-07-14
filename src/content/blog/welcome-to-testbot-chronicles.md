@@ -3,11 +3,14 @@ title: 'Welcome to TestBot Chronicles'
 description: 'Introducing TestBot Chronicles - where testing meets innovation and automation drives quality.'
 pubDate: 2025-07-14
 updatedDate: 2025-07-14 
+heroImage : 'images/blog/chronicles/titus.png'
 tags: ['introduction', 'testing', 'automation', 'quality-assurance']
 category: 'Introduction'
 ---
 
-# Welcome to TestBot Chronicles
+![titusLogo](/images/blog/chronicles/titus.png)
+
+# This is Chronicles
 
 Hello and welcome to **TestBot Chronicles**, my personal corner of the internet where I share insights, experiences, and discoveries from the world of automated testing and quality assurance.
 

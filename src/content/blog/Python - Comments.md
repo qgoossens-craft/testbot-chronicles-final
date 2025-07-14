@@ -1,9 +1,9 @@
 ---
-title: 'Python comments'
+title: 'Python - Comments'
 description: 'A brief overview of Python comments'
 pubDate: 2025-07-14
 updatedDate: 2025-07-14   # Optional - only add if you update the post
-heroImage: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Python.svg/800px-Python.svg.png'  # Optional - blog post header image
+heroImage: 'images/blog/python/errors/python.png'  # Optional - blog post header image
 tags: ['python', 'code', 'learn']  # Add relevant tags
 category: 'Programming'
 draft: false  # Set to true to hide from published posts
@@ -11,7 +11,7 @@ draft: false  # Set to true to hide from published posts
 
 
 
-![python logo](https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Python.svg/800px-Python.svg.png)
+![python logo](/images/blog/python/errors/python.png)
 
 ## What Are Comments?
 
