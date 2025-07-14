@@ -3,13 +3,22 @@ export const prerender = true;
 
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogSearch from '../../components/BlogSearch.astro';
+import { calculateReadingTime, formatReadingTime } from '../../utils/readingTime';
 
 const allPosts = await getCollection('blog');
 
 // Filter out draft posts and sort by publication date (newest first)
-const publishedPosts = allPosts
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const publishedPosts = await Promise.all(
+  allPosts
+    .filter(post => !post.data.draft)
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .map(async (post) => {
+      const { Content } = await post.render();
+      const readingTime = calculateReadingTime(post.body);
+      return { ...post, readingTime };
+    })
+);
 
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', {
@@ -57,59 +66,67 @@ function formatDate(date: Date) {
           </div>
         </div>
       ) : (
-        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {publishedPosts.map((post) => (
-            <article class="group bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-xl transition-all duration-300 overflow-hidden">
-              <div class="p-6">
-                <div class="flex items-center text-sm text-gray-500 mb-3">
-                  <time datetime={post.data.pubDate.toISOString()}>
-                    {formatDate(post.data.pubDate)}
-                  </time>
-                  {post.data.updatedDate && (
-                    <span class="ml-2 text-xs">
-                      (Updated: {formatDate(post.data.updatedDate)})
+        <>
+          <BlogSearch />
+          <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {publishedPosts.map((post) => (
+              <article class="blog-post-card group bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-xl transition-all duration-300 overflow-hidden">
+                <div class="p-6">
+                  <div class="flex items-center justify-between text-sm text-gray-500 mb-3">
+                    <div class="flex items-center">
+                      <time datetime={post.data.pubDate.toISOString()}>
+                        {formatDate(post.data.pubDate)}
+                      </time>
+                      {post.data.updatedDate && (
+                        <span class="ml-2 text-xs">
+                          (Updated: {formatDate(post.data.updatedDate)})
+                        </span>
+                      )}
+                    </div>
+                    <span class="text-xs font-medium text-blue-600">
+                      {formatReadingTime(post.readingTime)}
                     </span>
-                  )}
-                </div>
-                
-                <h2 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                  <a href={`/blog/${post.slug}/`} class="hover:underline">
-                    {post.data.title}
-                  </a>
-                </h2>
-                
-                <p class="text-gray-600 mb-4 line-clamp-3">
-                  {post.data.description}
-                </p>
-                
-                {post.data.tags && post.data.tags.length > 0 && (
-                  <div class="flex flex-wrap gap-2 mb-4">
-                    {post.data.tags.slice(0, 3).map((tag) => (
-                      <span class="inline-block bg-terminal-bg/10 text-terminal-green text-xs font-mono px-2 py-1 rounded">
-                        #{tag}
-                      </span>
-                    ))}
-                    {post.data.tags.length > 3 && (
-                      <span class="text-xs text-gray-500">
-                        +{post.data.tags.length - 3} more
-                      </span>
-                    )}
                   </div>
-                )}
-                
-                <a 
-                  href={`/blog/${post.slug}/`}
-                  class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm group-hover:translate-x-1 transition-transform"
-                >
-                  Read article
-                  <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                  </svg>
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
+                  
+                  <h2 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                    <a href={`/blog/${post.slug}/`} class="hover:underline">
+                      {post.data.title}
+                    </a>
+                  </h2>
+                  
+                  <p class="post-description text-gray-600 mb-4 line-clamp-3">
+                    {post.data.description}
+                  </p>
+                  
+                  {post.data.tags && post.data.tags.length > 0 && (
+                    <div class="flex flex-wrap gap-2 mb-4">
+                      {post.data.tags.slice(0, 3).map((tag) => (
+                        <span class="post-tag inline-block bg-terminal-bg/10 text-terminal-green text-xs font-mono px-2 py-1 rounded">
+                          #{tag}
+                        </span>
+                      ))}
+                      {post.data.tags.length > 3 && (
+                        <span class="text-xs text-gray-500">
+                          +{post.data.tags.length - 3} more
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  
+                  <a 
+                    href={`/blog/${post.slug}/`}
+                    class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm group-hover:translate-x-1 transition-transform"
+                  >
+                    Read article
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
       )}
     </div>
   </section>
