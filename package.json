@@ -9,13 +9,14 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@rollup/rollup-win32-x64-msvc": "^4.45.0",
-    "astro": "^4.16.18",
-    "rollup": "^4.45.0"
+    "astro": "^4.16.18"
   },
   "devDependencies": {
     "@astrojs/tailwind": "^6.0.2",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-win32-x64-msvc": "^4.45.0"
   }
 }
