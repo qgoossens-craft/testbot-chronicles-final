@@ -54,9 +54,6 @@
           <button class="terminal-button" id="btn-experience">
             [experience] Work History
           </button>
-          <button class="terminal-button" id="btn-portfolio">
-            [portfolio] Portfolio
-          </button>
           <button class="terminal-button" id="btn-blog">
             [blog] TestBot Chronicles
           </button>
@@ -115,6 +112,7 @@
       this.commands = {
         help: this.showHelp.bind(this),
         whoami: this.showWhoami.bind(this),
+        whoistitus: this.showWhoIsTitus.bind(this),
         skills: this.showSkills.bind(this),
         'skills.json': this.showSkillsJson.bind(this),
         projects: this.showProjects.bind(this),
@@ -134,7 +132,6 @@
         logo: this.showLogo.bind(this),
         ascii: this.showLogo.bind(this),
         experience: this.showExperience.bind(this),
-        portfolio: this.showPortfolio.bind(this),
       };
       
       this.setupEventListeners();
@@ -188,7 +185,6 @@
         { id: 'btn-projects', command: 'projects' },
         { id: 'btn-hire-me', command: 'hire-me' },
         { id: 'btn-experience', command: 'experience' },
-        { id: 'btn-portfolio', command: 'portfolio' },
         { id: 'btn-blog', command: 'blog' },
         { id: 'btn-logo', command: 'logo' },
         { id: 'btn-help', command: 'help' }
@@ -441,10 +437,10 @@
       this.addOutput('Available commands:', 'terminal-blue');
       this.addOutput('  help          - Show this help message', 'terminal-gray');
       this.addOutput('  whoami        - About me', 'terminal-gray');
+      this.addOutput('  whoistitus    - Personal background story', 'terminal-gray');
       this.addOutput('  skills        - My technical skills', 'terminal-gray');
       this.addOutput('  skills.json   - Skills in JSON format', 'terminal-gray');
       this.addOutput('  experience    - Work history and roles', 'terminal-gray');
-      this.addOutput('  portfolio     - Portfolio highlights', 'terminal-gray');
       this.addOutput('  projects      - My projects and experience', 'terminal-gray');
       this.addOutput('  blog          - TestBot Chronicles blog', 'terminal-gray');
       this.addOutput('  contact       - Get in touch', 'terminal-gray');
@@ -463,27 +459,52 @@
     
     showWhoami() {
       this.addOutput('[>] Hi! I\'m Titus from Titus Consulting', 'terminal-blue');
-      this.addOutput('[+] Automated Test Engineer & Quality Assurance Specialist', 'terminal-gray');
-      this.addOutput('>> Passionate about testing frameworks, CI/CD, and automation', 'terminal-gray');
+      this.addOutput('[+] Freelance QA Engineer and Tech enabler', 'terminal-gray');
+      this.addOutput('>> From startup founder to QA strategist - I bring a unique perspective', 'terminal-gray');
+      this.addOutput('>> I don\'t just write tests; I design quality systems that enable', 'terminal-gray');
+      this.addOutput('>> teams to move fast and ship confidently', 'terminal-gray');
       this.addOutput('[*] Author of TestBot Chronicles blog', 'terminal-gray');
       this.addOutput('>> Available for freelance projects', 'terminal-green');
       this.addOutput('[*] Based in Belgium', 'terminal-gray');
     }
     
+    showWhoIsTitus() {
+      this.addOutput('[>] Personal Background Story', 'terminal-blue');
+      this.addOutput('', 'terminal-gray');
+      this.addOutput('I\'m Quentin, an ex startup founder. I started my career', 'terminal-gray');
+      this.addOutput('more than 10 years ago, doing manual automation testing', 'terminal-gray');
+      this.addOutput('and fell in love with the craft. Now, many years later,', 'terminal-gray');
+      this.addOutput('I\'m still passionate about bringing quality to tech', 'terminal-gray');
+      this.addOutput('projects with automation and research & development.', 'terminal-gray');
+      this.addOutput('', 'terminal-gray');
+      this.addOutput('[*] From startup founder to testing craftsman', 'terminal-green');
+      this.addOutput('[*] 10+ years in the testing industry', 'terminal-green');
+      this.addOutput('[*] Driven by quality and innovation', 'terminal-green');
+    }
+    
     showSkills() {
-      this.addOutput('[+] Technical Skills:', 'terminal-blue');
+      this.addOutput('[+] My Expertise:', 'terminal-blue');
+      this.addOutput('', 'terminal-gray');
+      this.addOutput('Core Strengths:', 'terminal-orange');
+      this.addOutput('  ✓ End-to-end automation strategies that reduce risk', 'terminal-green');
+      this.addOutput('  ✓ CI/CD optimization for rapid, reliable deployments', 'terminal-green');
+      this.addOutput('  ✓ R&D methodologies that drive innovation', 'terminal-green');
       this.addOutput('', 'terminal-gray');
       this.addOutput('Testing Frameworks:', 'terminal-orange');
-      this.addOutput('  ✓ Playwright, Cypress, Selenium, Jest', 'terminal-green');
+      this.addOutput('  ✓ End-to-End Playwright Automation', 'terminal-green');
+      this.addOutput('  ✓ AI-powered Testing Solutions', 'terminal-green');
+      this.addOutput('  ✓ Cross-platform test Frameworks', 'terminal-green');
       this.addOutput('', 'terminal-gray');
-      this.addOutput('Languages:', 'terminal-orange');
-      this.addOutput('  ✓ JavaScript/TypeScript, Python, C#', 'terminal-green');
+      this.addOutput('Languages & Tech:', 'terminal-orange');
+      this.addOutput('  ✓ TypeScript/JavaScript Expertise', 'terminal-green');
+      this.addOutput('  ✓ Python Test Automation', 'terminal-green');
+      this.addOutput('  ✓ Angular & Astro Development', 'terminal-green');
       this.addOutput('', 'terminal-gray');
-      this.addOutput('CI/CD & DevOps:', 'terminal-orange');
-      this.addOutput('  ✓ GitHub Actions, Jenkins, Docker, Kubernetes', 'terminal-green');
-      this.addOutput('', 'terminal-gray');
-      this.addOutput('Specialties:', 'terminal-orange');
-      this.addOutput('  ✓ API Testing, Performance Testing, Test Strategy, BDD/TDD', 'terminal-green');
+      this.addOutput('DevOps & Performance:', 'terminal-orange');
+      this.addOutput('  ✓ CI/CD Pipeline Design', 'terminal-green');
+      this.addOutput('  ✓ Container-based Testing', 'terminal-green');
+      this.addOutput('  ✓ Cloud-native QA Solutions', 'terminal-green');
+      this.addOutput('  ✓ Load Testing with JMeter', 'terminal-green');
     }
     
     showSkillsJson() {
@@ -520,7 +541,7 @@
     showContact() {
       this.addOutput('[>] Let\'s connect!', 'terminal-blue');
       this.addOutput('', 'terminal-gray');
-      this.addOutput('Email: contact@titusconsulting.be', 'terminal-green');
+      this.addOutput('Email: quentin@titusconsulting.be', 'terminal-green');
       this.addOutput('Website: titusconsulting.be', 'terminal-green');
       this.addOutput('Blog: TestBot Chronicles', 'terminal-green');
       this.addOutput('', 'terminal-gray');
@@ -529,6 +550,8 @@
       this.addOutput('  • CI/CD pipeline setup', 'terminal-gray');
       this.addOutput('  • Quality assurance strategy', 'terminal-gray');
       this.addOutput('  • Testing framework implementation', 'terminal-gray');
+      this.addOutput('  • R&D Innovation Leadership', 'terminal-gray');
+      this.addOutput('  • Digital Testing Transformation', 'terminal-gray');
     }
     
     listDirectory() {
@@ -711,44 +734,26 @@
     }
     
     showExperience() {
-      this.addOutput('[+] WORK EXPERIENCE', 'terminal-green');
+      this.addOutput('[+] EXPERIENCE HIGHLIGHTS', 'terminal-green');
       this.addOutput('', 'terminal-gray');
-      this.addOutput('[2020-Present] Senior Test Automation Engineer', 'terminal-blue');
-      this.addOutput('  * Lead test automation initiatives for enterprise applications', 'terminal-gray');
-      this.addOutput('  * Implement CI/CD pipelines with comprehensive test coverage', 'terminal-gray');
-      this.addOutput('  * Mentor junior developers on testing best practices', 'terminal-gray');
+      this.addOutput('[⚡] 10+ Years', 'terminal-blue');
+      this.addOutput('  * Professional experience in test automation and quality assurance', 'terminal-gray');
       this.addOutput('', 'terminal-gray');
-      this.addOutput('[2018-2020] QA Engineer', 'terminal-blue');
-      this.addOutput('  * Developed test automation frameworks from scratch', 'terminal-gray');
-      this.addOutput('  * Performed manual and automated testing for web applications', 'terminal-gray');
-      this.addOutput('  * Collaborated with cross-functional teams on quality initiatives', 'terminal-gray');
+      this.addOutput('[🎯] 50+ Projects', 'terminal-blue');
+      this.addOutput('  * Successfully delivered with measurable quality improvements', 'terminal-gray');
+      this.addOutput('  * Across multiple industries and technology stacks', 'terminal-gray');
       this.addOutput('', 'terminal-gray');
-      this.addOutput('[2016-2018] Junior Test Engineer', 'terminal-blue');
-      this.addOutput('  * Created and executed test cases for mobile applications', 'terminal-gray');
-      this.addOutput('  * Performed regression testing and bug reporting', 'terminal-gray');
-      this.addOutput('  * Learned automation tools and testing methodologies', 'terminal-gray');
+      this.addOutput('[📚] Training & Mentorship', 'terminal-blue');
+      this.addOutput('  * Guided teams in adopting modern testing practices', 'terminal-gray');
+      this.addOutput('  * QA Team Development Programs', 'terminal-gray');
+      this.addOutput('  * Technical Mentoring & Coaching', 'terminal-gray');
+      this.addOutput('', 'terminal-gray');
+      this.addOutput('[🚀] Entrepreneurship', 'terminal-blue');
+      this.addOutput('  * Ex-founder leveraging business expertise', 'terminal-gray');
+      this.addOutput('  * Transform QA & R&D strategies', 'terminal-gray');
+      this.addOutput('  * Strategic Consulting & Innovation Leadership', 'terminal-gray');
     }
     
-    showPortfolio() {
-      this.addOutput('[+] PORTFOLIO HIGHLIGHTS', 'terminal-green');
-      this.addOutput('', 'terminal-gray');
-      this.addOutput('[Project Alpha] E-commerce Test Suite', 'terminal-blue');
-      this.addOutput('  * End-to-end Playwright automation for checkout flow', 'terminal-gray');
-      this.addOutput('  * 95% test coverage with parallel execution', 'terminal-gray');
-      this.addOutput('  * Integrated with GitHub Actions for CI/CD', 'terminal-gray');
-      this.addOutput('', 'terminal-gray');
-      this.addOutput('[Project Beta] API Testing Framework', 'terminal-blue');
-      this.addOutput('  * REST API automation using Postman/Newman', 'terminal-gray');
-      this.addOutput('  * Data-driven testing with multiple environments', 'terminal-gray');
-      this.addOutput('  * Performance testing with load scenarios', 'terminal-gray');
-      this.addOutput('', 'terminal-gray');
-      this.addOutput('[Project Gamma] Mobile App Testing', 'terminal-blue');
-      this.addOutput('  * Cross-platform testing with Appium', 'terminal-gray');
-      this.addOutput('  * Device farm integration for real device testing', 'terminal-gray');
-      this.addOutput('  * Accessibility testing compliance (WCAG 2.1)', 'terminal-gray');
-      this.addOutput('', 'terminal-gray');
-      this.addOutput('>> View more at: github.com/titus-testing', 'terminal-purple');
-    }
     
     clearTerminal() {
       // Restore the original content (which has properly styled buttons)
