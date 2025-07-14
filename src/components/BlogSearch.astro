@@ -44,28 +44,42 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('search-input');
-    const categoryFilters = document.getElementById('category-filters');
-    const tagFilters = document.getElementById('tag-filters');
-    const resultsCount = document.getElementById('results-count');
+    const searchInput = document.getElementById('search-input') as HTMLInputElement;
+    const categoryFilters = document.getElementById('category-filters') as HTMLDivElement;
+    const tagFilters = document.getElementById('tag-filters') as HTMLDivElement;
+    const resultsCount = document.getElementById('results-count') as HTMLSpanElement;
     const blogPosts = document.querySelectorAll('.blog-post-card');
     
-    let allPosts = [];
-    let allCategories = new Set();
-    let allTags = new Set();
-    let activeCategoryFilters = new Set();
-    let activeTagFilters = new Set();
+    interface PostData {
+      element: HTMLElement;
+      title: string;
+      description: string;
+      tags: string[];
+      category: string | null;
+      searchText: string;
+    }
+    
+    let allPosts: PostData[] = [];
+    let allCategories = new Set<string>();
+    let allTags = new Set<string>();
+    let activeCategoryFilters = new Set<string>();
+    let activeTagFilters = new Set<string>();
     
     // Initialize posts data
-    blogPosts.forEach((post, index) => {
-      const title = post.querySelector('h2').textContent.toLowerCase();
-      const description = post.querySelector('.post-description').textContent.toLowerCase();
-      const tags = Array.from(post.querySelectorAll('.post-tag')).map(tag => tag.textContent.replace('#', '').toLowerCase());
+    blogPosts.forEach((post: Element, index: number) => {
+      const titleElement = post.querySelector('h2');
+      const descriptionElement = post.querySelector('.post-description');
+      
+      if (!titleElement || !descriptionElement) return;
+      
+      const title = titleElement.textContent?.toLowerCase() || '';
+      const description = descriptionElement.textContent?.toLowerCase() || '';
+      const tags = Array.from(post.querySelectorAll('.post-tag')).map((tag: Element) => tag.textContent?.replace('#', '').toLowerCase() || '').filter((tag: string) => tag);
       const categoryElement = post.querySelector('.post-category');
-      const category = categoryElement ? categoryElement.textContent.toLowerCase() : null;
+      const category = categoryElement?.textContent?.toLowerCase() || null;
       
       allPosts.push({
-        element: post,
+        element: post as HTMLElement,
         title,
         description,
         tags,
@@ -73,7 +87,7 @@
         searchText: title + ' ' + description + ' ' + tags.join(' ') + (category ? ' ' + category : '')
       });
       
-      tags.forEach(tag => allTags.add(tag));
+      tags.forEach((tag: string) => allTags.add(tag));
       if (category) allCategories.add(category);
     });
     
@@ -89,7 +103,7 @@
       categoryFilters.appendChild(allButton);
       
       // Category buttons
-      Array.from(allCategories).sort().forEach(category => {
+      Array.from(allCategories).sort().forEach((category: string) => {
         const button = document.createElement('button');
         button.textContent = category.charAt(0).toUpperCase() + category.slice(1);
         button.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-white text-gray-700 border border-gray-300 hover:bg-gray-50';
@@ -103,7 +117,7 @@
       tagFilters.innerHTML = '';
       
       // Tag buttons
-      Array.from(allTags).sort().forEach(tag => {
+      Array.from(allTags).sort().forEach((tag: string) => {
         const button = document.createElement('button');
         button.textContent = '#' + tag;
         button.className = 'px-3 py-1 rounded-full text-sm font-medium transition-colors bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200';
@@ -113,7 +127,7 @@
     }
     
     // Toggle category filter
-    function toggleCategoryFilter(category, button) {
+    function toggleCategoryFilter(category: string, button: HTMLButtonElement) {
       // Clear all category filters first (single selection)
       activeCategoryFilters.clear();
       
@@ -126,7 +140,7 @@
     }
     
     // Toggle tag filter
-    function toggleTagFilter(tag, button) {
+    function toggleTagFilter(tag: string, button: HTMLButtonElement) {
       if (activeTagFilters.has(tag)) {
         activeTagFilters.delete(tag);
         button.className = 'px-3 py-1 rounded-full text-sm font-medium transition-colors bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200';
@@ -153,6 +167,8 @@
     // Update All button states
     function updateAllButtons() {
       const categoryAllButton = categoryFilters.querySelector('button');
+      if (!categoryAllButton) return;
+      
       if (activeCategoryFilters.size === 0 && activeTagFilters.size === 0 && !searchInput.value.trim()) {
         categoryAllButton.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-blue-600 text-white border border-blue-600';
       } else {
@@ -162,9 +178,9 @@
     
     // Update category button states
     function updateCategoryButtons() {
-      const buttons = categoryFilters.querySelectorAll('button:not(:first-child)');
-      buttons.forEach(button => {
-        const category = button.textContent.toLowerCase();
+      const buttons = categoryFilters.querySelectorAll<HTMLButtonElement>('button:not(:first-child)');
+      buttons.forEach((button) => {
+        const category = button.textContent?.toLowerCase() || '';
         if (activeCategoryFilters.has(category)) {
           button.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-blue-600 text-white border border-blue-600';
         } else {
@@ -175,9 +191,9 @@
     
     // Update tag button states
     function updateTagButtons() {
-      const buttons = tagFilters.querySelectorAll('button');
-      buttons.forEach(button => {
-        const tag = button.textContent.replace('#', '').toLowerCase();
+      const buttons = tagFilters.querySelectorAll<HTMLButtonElement>('button');
+      buttons.forEach((button) => {
+        const tag = button.textContent?.replace('#', '').toLowerCase() || '';
         if (activeTagFilters.has(tag)) {
           button.className = 'px-3 py-1 rounded-full text-sm font-medium transition-colors bg-blue-100 text-blue-800 border border-blue-200';
         } else {
@@ -191,7 +207,7 @@
       const searchTerm = searchInput.value.toLowerCase().trim();
       let visibleCount = 0;
       
-      allPosts.forEach(post => {
+      allPosts.forEach((post: PostData) => {
         let matches = true;
         
         // Check search term
@@ -201,7 +217,7 @@
         
         // Check category filters
         if (activeCategoryFilters.size > 0) {
-          const hasActiveCategory = Array.from(activeCategoryFilters).some(filter => 
+          const hasActiveCategory = Array.from(activeCategoryFilters).some((filter: string) => 
             post.category === filter
           );
           if (!hasActiveCategory) {
@@ -211,7 +227,7 @@
         
         // Check tag filters
         if (activeTagFilters.size > 0) {
-          const hasActiveTag = Array.from(activeTagFilters).some(filter => 
+          const hasActiveTag = Array.from(activeTagFilters).some((filter: string) => 
             post.tags.includes(filter)
           );
           if (!hasActiveTag) {
