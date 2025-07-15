@@ -2,11 +2,11 @@
 title: 'ikigai'
 description: 'A brief explanation of what the japanese Ikigai is about'
 pubDate: 2025-07-14
-updatedDate: 2025-07-14  # Optional - only add if you update the post
-heroImage: 'images/blog/ikigai/ikigai.png'  # Optional - blog post header image
-tags: ['concepts', 'personal development', 'philosophy']  # Add relevant tags
+updatedDate: 2025-07-14
+heroImage: 'images/blog/ikigai/ikigai.png'
+tags: ['concepts', 'personal development', 'philosophy']
 category: 'Personal Development'
-draft: false  # Set to true to hide from published posts
+draft: false
 ---
 
 ![ikigai representation](/images/blog/ikigai/ikigai.png)

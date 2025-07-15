@@ -2,11 +2,11 @@
 title: 'Python - Comments'
 description: 'A brief overview of Python comments'
 pubDate: 2025-07-14
-updatedDate: 2025-07-14   # Optional - only add if you update the post
-heroImage: 'images/blog/python/errors/python.png'  # Optional - blog post header image
-tags: ['python', 'code', 'learn']  # Add relevant tags
+updatedDate: 2025-07-14
+heroImage: 'images/blog/python/errors/python.png'
+tags: ['python', 'code', 'learn']
 category: 'programming'
-draft: false  # Set to true to hide from published posts
+draft: false
 ---
 
 
