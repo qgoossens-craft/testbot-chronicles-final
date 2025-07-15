@@ -44,6 +44,13 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // Add a small delay to ensure all card elements are properly rendered
+    setTimeout(() => {
+      initializeBlogSearch();
+    }, 100);
+  });
+  
+  function initializeBlogSearch() {
     const searchInput = document.getElementById('search-input') as HTMLInputElement;
     const categoryFilters = document.getElementById('category-filters') as HTMLDivElement;
     const tagFilters = document.getElementById('tag-filters') as HTMLDivElement;
@@ -261,5 +268,5 @@
     createCategoryFilters();
     createTagFilters();
     filterPosts();
-  });
+  }
 </script>
