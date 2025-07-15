@@ -28,6 +28,9 @@
           <svg id="pause-icon" class="w-4 h-4 text-gray-700 hidden" fill="currentColor" viewBox="0 0 24 24">
             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
           </svg>
+          <div id="loading-icon" class="w-4 h-4 hidden">
+            <div class="animate-spin rounded-full h-4 w-4 border-2 border-gray-300 border-t-gray-700"></div>
+          </div>
         </button>
       </div>
     </div>
@@ -109,6 +112,9 @@
           <svg id="pause-icon-main" class="w-6 h-6 text-white hidden" fill="currentColor" viewBox="0 0 24 24">
             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
           </svg>
+          <div id="loading-icon-main" class="w-6 h-6 hidden">
+            <div class="animate-spin rounded-full h-6 w-6 border-2 border-white/30 border-t-white"></div>
+          </div>
         </button>
       </div>
     </div>
@@ -156,7 +162,7 @@ class LoFiRadioPlayer {
     this.volume = globalState.volume;
     
     if (this.isPlaying) {
-      this.startVinylAnimation();
+      this.startLogoAnimation();
     }
   }
   
@@ -242,9 +248,11 @@ class LoFiRadioPlayer {
     this.volume = state.volume;
     
     if (this.isPlaying) {
+      this.hideLoading();
       this.startLogoAnimation();
       this.updateStatus('Click to maximize');
     } else {
+      this.hideLoading();
       this.stopLogoAnimation();
       this.updateStatus('Click to maximize');
     }
@@ -252,12 +260,17 @@ class LoFiRadioPlayer {
     this.updateUI();
   }
   
-  togglePlayPause() {
-    this.globalAudio.togglePlayPause();
+  async togglePlayPause() {
+    this.showLoading();
+    this.updateStatus('Loading...');
+    await this.globalAudio.togglePlayPause();
   }
   
   selectStation(stationIndex) {
     if (stationIndex === this.currentStation) return;
+    
+    this.showLoading();
+    this.updateStatus('Loading station...');
     
     // Always start playing when selecting a new station
     this.globalAudio.selectStation(stationIndex);
@@ -363,10 +376,26 @@ class LoFiRadioPlayer {
     slider.style.background = `linear-gradient(to right, #9333ea 0%, #9333ea ${percentage}%, #e5e7eb ${percentage}%, #e5e7eb 100%)`;
   }
   
+  showLoading() {
+    const loadingIcons = document.querySelectorAll('#loading-icon, #loading-icon-main');
+    const playIcons = document.querySelectorAll('#play-icon, #play-icon-main');
+    const pauseIcons = document.querySelectorAll('#pause-icon, #pause-icon-main');
+    
+    loadingIcons.forEach(icon => icon.classList.remove('hidden'));
+    playIcons.forEach(icon => icon.classList.add('hidden'));
+    pauseIcons.forEach(icon => icon.classList.add('hidden'));
+  }
+  
+  hideLoading() {
+    const loadingIcons = document.querySelectorAll('#loading-icon, #loading-icon-main');
+    loadingIcons.forEach(icon => icon.classList.add('hidden'));
+  }
+  
   handleAudioError(error) {
     console.error('Audio error:', error);
+    this.hideLoading();
     this.updateStatus('Station offline');
-    this.stopVinylAnimation();
+    this.stopLogoAnimation();
     this.updateUI();
   }
 }

@@ -196,6 +196,11 @@ window.globalRadioAudio = window.globalRadioAudio || {
     this.currentStation = stationIndex;
     
     try {
+      // Pause current audio to prevent conflicts
+      if (!this.audio.paused) {
+        this.audio.pause();
+      }
+      
       // Only change source if different station
       if (this.audio.src !== station.url) {
         this.audio.src = station.url;
@@ -205,16 +210,16 @@ window.globalRadioAudio = window.globalRadioAudio || {
       this.saveSettings();
       this.notifyUIUpdate();
       
-      if (autoPlay && this.shouldAutoResume()) {
+      if (autoPlay) {
         // Wait for audio to be ready before playing
-        const playWhenReady = () => {
+        const playWhenReady = async () => {
           if (this.audio.readyState >= 2) {
-            this.play();
+            await this.play();
           } else {
             setTimeout(playWhenReady, 100);
           }
         };
-        playWhenReady();
+        await playWhenReady();
       }
       
     } catch (error) {
@@ -234,13 +239,27 @@ window.globalRadioAudio = window.globalRadioAudio || {
     if (!this.audio) return;
     
     try {
+      // Check if the audio is already playing or if a play request is pending
+      if (this.audio.readyState === 0) {
+        // Audio not loaded yet, wait for it to load
+        await new Promise((resolve) => {
+          this.audio.addEventListener('loadeddata', resolve, { once: true });
+        });
+      }
+      
       await this.audio.play();
       this.isPlaying = true;
       this.saveSettings();
       this.notifyUIUpdate();
     } catch (error) {
+      // Handle AbortError specifically - it's not critical if play is interrupted
+      if (error.name === 'AbortError') {
+        console.log('Play request was interrupted - this is normal');
+        return;
+      }
+      
       console.error('Error playing audio:', error);
-      this.handleError();
+      this.handleError(error);
     }
   },
   
@@ -281,11 +300,11 @@ window.globalRadioAudio = window.globalRadioAudio || {
   },
   
   // Public API for UI components
-  togglePlayPause() {
+  async togglePlayPause() {
     if (this.isPlaying) {
       this.pause();
     } else {
-      this.play();
+      await this.play();
     }
   },
   
