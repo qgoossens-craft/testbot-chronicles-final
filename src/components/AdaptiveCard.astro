@@ -93,7 +93,7 @@ function formatDate(date: Date) {
 <script>
   import { extractColorsFromImage, getContrastColor } from '../utils/colorExtractor';
   
-  document.addEventListener('DOMContentLoaded', () => {
+  function initializeAdaptiveCards() {
     const cards = document.querySelectorAll('.blog-post-card');
     
     cards.forEach(async (card) => {
@@ -141,7 +141,11 @@ function formatDate(date: Date) {
         // Fallback to default styling - keep the gray background
       }
     });
-  });
+  }
+  
+  // Handle both initial load and View Transitions
+  document.addEventListener('DOMContentLoaded', initializeAdaptiveCards);
+  document.addEventListener('astro:page-load', initializeAdaptiveCards);
 </script>
 
 <style>

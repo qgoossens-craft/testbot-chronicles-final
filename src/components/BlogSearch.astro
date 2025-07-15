@@ -43,14 +43,14 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  function initializeBlogSearch() {
     // Add a small delay to ensure all card elements are properly rendered
     setTimeout(() => {
-      initializeBlogSearch();
+      setupBlogSearch();
     }, 100);
-  });
+  }
   
-  function initializeBlogSearch() {
+  function setupBlogSearch() {
     const searchInput = document.getElementById('search-input') as HTMLInputElement;
     const categoryFilters = document.getElementById('category-filters') as HTMLDivElement;
     const tagFilters = document.getElementById('tag-filters') as HTMLDivElement;
@@ -269,4 +269,8 @@
     createTagFilters();
     filterPosts();
   }
+  
+  // Handle both initial load and View Transitions
+  document.addEventListener('DOMContentLoaded', initializeBlogSearch);
+  document.addEventListener('astro:page-load', initializeBlogSearch);
 </script>
