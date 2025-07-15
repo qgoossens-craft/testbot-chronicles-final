@@ -8,6 +8,7 @@ export default defineConfig({
     tailwind()
   ],
   site: 'https://titusconsulting.be',
+  base: '/',
   output: 'static', // Static build for GitHub Pages
   markdown: {
     syntaxHighlight: 'shiki',
