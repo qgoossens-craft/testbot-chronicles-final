@@ -96,6 +96,11 @@ function formatDate(date: Date) {
   function initializeAdaptiveCards() {
     const cards = document.querySelectorAll('.blog-post-card');
     
+    // Exit early if no cards found
+    if (!cards.length) {
+      return;
+    }
+    
     cards.forEach(async (card) => {
       const heroImage = card.querySelector('.hero-image') as HTMLImageElement;
       const imageContainer = card.querySelector('.image-container') as HTMLElement;

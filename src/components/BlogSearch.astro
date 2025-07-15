@@ -57,6 +57,11 @@
     const resultsCount = document.getElementById('results-count') as HTMLSpanElement;
     const blogPosts = document.querySelectorAll('.blog-post-card');
     
+    // Exit early if required elements are not found (not on blog page)
+    if (!searchInput || !categoryFilters || !tagFilters || !resultsCount || !blogPosts.length) {
+      return;
+    }
+    
     interface PostData {
       element: HTMLElement;
       title: string;
@@ -259,10 +264,12 @@
     }
     
     // Search input event listener
-    searchInput.addEventListener('input', function() {
-      updateAllButtons();
-      filterPosts();
-    });
+    if (searchInput) {
+      searchInput.addEventListener('input', function() {
+        updateAllButtons();
+        filterPosts();
+      });
+    }
     
     // Initialize
     createCategoryFilters();
