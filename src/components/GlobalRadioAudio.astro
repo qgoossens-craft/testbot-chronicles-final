@@ -57,9 +57,16 @@ window.globalRadioAudio = window.globalRadioAudio || {
     
     this.isInitialized = true;
     
-    // Resume playback if it was playing before navigation
-    if (this.shouldAutoResume()) {
-      this.resumePlayback();
+    // If we're on the home page, pause any playing music
+    if (this.isHomePage()) {
+      if (this.isPlaying) {
+        this.pause();
+      }
+    } else {
+      // Resume playback if it was playing before navigation (non-home pages only)
+      if (this.shouldAutoResume()) {
+        this.resumePlayback();
+      }
     }
   },
   
@@ -128,7 +135,21 @@ window.globalRadioAudio = window.globalRadioAudio || {
   },
   
   shouldAutoResume() {
-    return localStorage.getItem('lofi-radio-playing') === 'true';
+    // Only auto-resume if we have recorded user interaction
+    const hasInteracted = sessionStorage.getItem('lofi-radio-user-interacted');
+    const wasPlaying = localStorage.getItem('lofi-radio-playing') === 'true';
+    
+    // Don't auto-resume on home page
+    if (this.isHomePage()) {
+      return false;
+    }
+    
+    // Don't auto-resume on fresh page load without user interaction
+    return wasPlaying && hasInteracted === 'true';
+  },
+
+  isHomePage() {
+    return window.location.pathname === '/' || window.location.pathname === '/index.html';
   },
   
   setupGlobalEvents() {
@@ -214,7 +235,18 @@ window.globalRadioAudio = window.globalRadioAudio || {
         // Wait for audio to be ready before playing
         const playWhenReady = async () => {
           if (this.audio.readyState >= 2) {
-            await this.play();
+            try {
+              await this.play();
+            } catch (error) {
+              // If autoplay fails, just set up the player without playing
+              if (error.name === 'NotAllowedError') {
+                console.log('Autoplay not allowed - radio ready but not playing');
+                this.isPlaying = false;
+                this.notifyUIUpdate();
+                return;
+              }
+              throw error;
+            }
           } else {
             setTimeout(playWhenReady, 100);
           }
@@ -249,12 +281,23 @@ window.globalRadioAudio = window.globalRadioAudio || {
       
       await this.audio.play();
       this.isPlaying = true;
+      // Record successful user interaction
+      sessionStorage.setItem('lofi-radio-user-interacted', 'true');
       this.saveSettings();
       this.notifyUIUpdate();
     } catch (error) {
       // Handle AbortError specifically - it's not critical if play is interrupted
       if (error.name === 'AbortError') {
         console.log('Play request was interrupted - this is normal');
+        return;
+      }
+      
+      // Handle NotAllowedError (autoplay restriction) silently
+      if (error.name === 'NotAllowedError') {
+        console.log('Autoplay blocked - waiting for user interaction');
+        this.isPlaying = false;
+        this.saveSettings();
+        this.notifyUIUpdate();
         return;
       }
       
@@ -304,7 +347,14 @@ window.globalRadioAudio = window.globalRadioAudio || {
     if (this.isPlaying) {
       this.pause();
     } else {
-      await this.play();
+      // Check if audio source is set for current station
+      const station = this.stations[this.currentStation];
+      if (!this.audio.src || this.audio.src !== station.url) {
+        // Load current station first, then play
+        await this.loadStation(this.currentStation, true);
+      } else {
+        await this.play();
+      }
     }
   },
   
@@ -335,6 +385,13 @@ document.addEventListener('astro:page-load', () => {
   // Re-initialize if needed (shouldn't be needed with view transitions)
   if (!window.globalRadioAudio.isInitialized) {
     window.globalRadioAudio.init();
+  } else {
+    // Handle page changes - pause music on home page
+    if (window.globalRadioAudio.isHomePage()) {
+      if (window.globalRadioAudio.isPlaying) {
+        window.globalRadioAudio.pause();
+      }
+    }
   }
 });
 </script>

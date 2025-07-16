@@ -207,59 +207,80 @@
       const terminalBody = document.querySelector('.bg-terminal-bg\\/40');
       
       // Close button (red) - minimizes terminal
-      document.getElementById('close-btn').addEventListener('click', () => {
-        this.addOutput('🔴 Terminal session ended. Refresh page to restart.', 'terminal-orange');
-        this.input.disabled = true;
-        this.input.placeholder = 'Terminal closed. Refresh page to restart.';
-        terminalBody.style.opacity = '0.3';
-      });
+      const closeBtn = document.getElementById('close-btn');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          this.addOutput('🔴 Terminal session ended. Refresh page to restart.', 'terminal-orange');
+          this.input.disabled = true;
+          this.input.placeholder = 'Terminal closed. Refresh page to restart.';
+          if (terminalBody) terminalBody.style.opacity = '0.3';
+        });
+      }
       
       // Minimize button (yellow) - toggles compact mode
       let isMinimized = false;
-      document.getElementById('minimize-btn').addEventListener('click', () => {
-        if (!isMinimized) {
-          // Responsive minimize height
-          if (window.innerWidth < 640) {
-            terminalBody.style.height = '120px';
-          } else if (window.innerWidth < 1024) {
-            terminalBody.style.height = '140px';
+      const minimizeBtn = document.getElementById('minimize-btn');
+      if (minimizeBtn) {
+        minimizeBtn.addEventListener('click', () => {
+          if (!isMinimized) {
+            // Responsive minimize height
+            if (terminalBody) {
+              if (window.innerWidth < 640) {
+                terminalBody.style.height = '120px';
+              } else if (window.innerWidth < 1024) {
+                terminalBody.style.height = '140px';
+              } else {
+                terminalBody.style.height = '150px';
+              }
+            }
+            this.addOutput('🟡 Terminal minimized. Click yellow button to restore.', 'terminal-orange');
+            isMinimized = true;
           } else {
-            terminalBody.style.height = '150px';
+            // Restore to responsive height
+            if (terminalBody) {
+              terminalBody.style.height = '';
+            }
+            this.addOutput('🟡 Terminal restored to normal size.', 'terminal-blue');
+            isMinimized = false;
           }
-          this.addOutput('🟡 Terminal minimized. Click yellow button to restore.', 'terminal-orange');
-          isMinimized = true;
-        } else {
-          // Restore to responsive height
-          terminalBody.style.height = '';
-          this.addOutput('🟡 Terminal restored to normal size.', 'terminal-blue');
-          isMinimized = false;
-        }
-        this.scrollToBottom();
-      });
+          this.scrollToBottom();
+        });
+      }
       
       // Maximize button (green) - toggles fullscreen mode
       let isMaximized = false;
-      document.getElementById('maximize-btn').addEventListener('click', () => {
-        if (!isMaximized) {
-          // Expand left and right with negative margins + increase height
-          terminal.style.marginLeft = '-6rem';
-          terminal.style.marginRight = '-6rem';
-          terminal.style.width = 'calc(100% + 12rem)';
-          terminalBody.style.height = '70vh';
-          
-          this.addOutput('🟢 Terminal maximized in all directions.', 'terminal-green');
-          isMaximized = true;
-        } else {
-          // Restore to original size
-          terminal.style.marginLeft = '';
-          terminal.style.marginRight = '';
-          terminal.style.width = '';
-          terminalBody.style.height = '';
-          this.addOutput('🟢 Terminal restored to normal size.', 'terminal-blue');
-          isMaximized = false;
-        }
-        this.scrollToBottom();
-      });
+      const maximizeBtn = document.getElementById('maximize-btn');
+      if (maximizeBtn) {
+        maximizeBtn.addEventListener('click', () => {
+          if (!isMaximized) {
+            // Expand left and right with negative margins + increase height
+            if (terminal) {
+              terminal.style.marginLeft = '-6rem';
+              terminal.style.marginRight = '-6rem';
+              terminal.style.width = 'calc(100% + 12rem)';
+            }
+            if (terminalBody) {
+              terminalBody.style.height = '70vh';
+            }
+            
+            this.addOutput('🟢 Terminal maximized in all directions.', 'terminal-green');
+            isMaximized = true;
+          } else {
+            // Restore to original size
+            if (terminal) {
+              terminal.style.marginLeft = '';
+              terminal.style.marginRight = '';
+              terminal.style.width = '';
+            }
+            if (terminalBody) {
+              terminalBody.style.height = '';
+            }
+            this.addOutput('🟢 Terminal restored to normal size.', 'terminal-blue');
+            isMaximized = false;
+          }
+          this.scrollToBottom();
+        });
+      }
     }
     
     setupFontControls() {
@@ -267,30 +288,40 @@
       let currentFontSize = 14; // Default font size in pixels
       
       // Font size decrease button
-      document.getElementById('font-smaller').addEventListener('click', () => {
-        if (currentFontSize > 10) { // Minimum font size
-          currentFontSize -= 2;
-          terminalBody.style.fontSize = currentFontSize + 'px';
-          this.addOutput(`🔤 Font size decreased to ${currentFontSize}px`, 'terminal-blue');
-          this.scrollToBottom();
-        } else {
-          this.addOutput('🔤 Font size is already at minimum (10px)', 'terminal-orange');
-          this.scrollToBottom();
-        }
-      });
+      const fontSmallerBtn = document.getElementById('font-smaller');
+      if (fontSmallerBtn) {
+        fontSmallerBtn.addEventListener('click', () => {
+          if (currentFontSize > 10) { // Minimum font size
+            currentFontSize -= 2;
+            if (terminalBody) {
+              terminalBody.style.fontSize = currentFontSize + 'px';
+            }
+            this.addOutput(`🔤 Font size decreased to ${currentFontSize}px`, 'terminal-blue');
+            this.scrollToBottom();
+          } else {
+            this.addOutput('🔤 Font size is already at minimum (10px)', 'terminal-orange');
+            this.scrollToBottom();
+          }
+        });
+      }
       
       // Font size increase button
-      document.getElementById('font-bigger').addEventListener('click', () => {
-        if (currentFontSize < 24) { // Maximum font size
-          currentFontSize += 2;
-          terminalBody.style.fontSize = currentFontSize + 'px';
-          this.addOutput(`🔤 Font size increased to ${currentFontSize}px`, 'terminal-green');
-          this.scrollToBottom();
-        } else {
-          this.addOutput('🔤 Font size is already at maximum (24px)', 'terminal-orange');
-          this.scrollToBottom();
-        }
-      });
+      const fontBiggerBtn = document.getElementById('font-bigger');
+      if (fontBiggerBtn) {
+        fontBiggerBtn.addEventListener('click', () => {
+          if (currentFontSize < 24) { // Maximum font size
+            currentFontSize += 2;
+            if (terminalBody) {
+              terminalBody.style.fontSize = currentFontSize + 'px';
+            }
+            this.addOutput(`🔤 Font size increased to ${currentFontSize}px`, 'terminal-green');
+            this.scrollToBottom();
+          } else {
+            this.addOutput('🔤 Font size is already at maximum (24px)', 'terminal-orange');
+            this.scrollToBottom();
+          }
+        });
+      }
     }
     
     focusInput() {

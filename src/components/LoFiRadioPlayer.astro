@@ -178,9 +178,40 @@ class LoFiRadioPlayer {
     localStorage.setItem('lofi-radio-expanded', this.isExpanded.toString());
   }
   
+  cleanupEventListeners() {
+    // Clean up click handlers by replacing elements
+    const elementsToClean = [
+      'play-pause-btn',
+      'play-pause-main', 
+      'radio-minimized',
+      'player-title',
+      'volume-slider'
+    ];
+    
+    elementsToClean.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        const newElement = element.cloneNode(true);
+        element.parentNode.replaceChild(newElement, element);
+      }
+    });
+    
+    // Clean up station options
+    document.querySelectorAll('.station-option').forEach(option => {
+      const newOption = option.cloneNode(true);
+      option.parentNode.replaceChild(newOption, option);
+    });
+  }
+
   setupEventListeners() {
+    // Clean up any existing listeners first
+    this.cleanupEventListeners();
+    
     // Play/Pause buttons
-    document.getElementById('play-pause-btn').addEventListener('click', () => this.togglePlayPause());
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    if (playPauseBtn) {
+      playPauseBtn.addEventListener('click', () => this.togglePlayPause());
+    }
     
     // Main play button in expanded view
     const mainPlayBtn = document.getElementById('play-pause-main');
@@ -189,11 +220,14 @@ class LoFiRadioPlayer {
     }
     
     // Click on minimized player to expand
-    document.getElementById('radio-minimized').addEventListener('click', (e) => {
-      // Don't expand when clicking the play button
-      if (e.target.closest('#play-pause-btn')) return;
-      this.toggleExpanded();
-    });
+    const radioMinimized = document.getElementById('radio-minimized');
+    if (radioMinimized) {
+      radioMinimized.addEventListener('click', (e) => {
+        // Don't expand when clicking the play button
+        if (e.target.closest('#play-pause-btn')) return;
+        this.toggleExpanded();
+      });
+    }
     
     // Click on player title to minimize when expanded
     const playerTitle = document.getElementById('player-title');
@@ -211,7 +245,10 @@ class LoFiRadioPlayer {
       volumeSlider.addEventListener('input', (e) => {
         this.volume = e.target.value / 100;
         this.globalAudio.setVolume(this.volume);
-        document.getElementById('volume-display').textContent = e.target.value + '%';
+        const volumeDisplay = document.getElementById('volume-display');
+        if (volumeDisplay) {
+          volumeDisplay.textContent = e.target.value + '%';
+        }
         this.updateVolumeSliderBackground(e.target.value);
         this.saveSettings();
       });
@@ -223,10 +260,13 @@ class LoFiRadioPlayer {
     });
     
     
-    // Listen for global radio state changes
-    window.addEventListener('radioStateChanged', (e) => {
-      this.handleGlobalStateChange(e.detail);
-    });
+    // Listen for global radio state changes (only add once)
+    if (!this.globalStateListenerAdded) {
+      window.addEventListener('radioStateChanged', (e) => {
+        this.handleGlobalStateChange(e.detail);
+      });
+      this.globalStateListenerAdded = true;
+    }
     
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
@@ -236,10 +276,13 @@ class LoFiRadioPlayer {
       }
     });
     
-    // Save UI state before page unload
-    window.addEventListener('beforeunload', () => {
-      this.saveSettings();
-    });
+    // Save UI state before page unload (only add once)
+    if (!this.beforeUnloadListenerAdded) {
+      window.addEventListener('beforeunload', () => {
+        this.saveSettings();
+      });
+      this.beforeUnloadListenerAdded = true;
+    }
   }
   
   handleGlobalStateChange(state) {
@@ -309,12 +352,14 @@ class LoFiRadioPlayer {
     const minimized = document.getElementById('radio-minimized');
     const expanded = document.getElementById('radio-expanded');
     
-    if (this.isExpanded) {
-      minimized.classList.add('hidden');
-      expanded.classList.remove('hidden');
-    } else {
-      minimized.classList.remove('hidden');
-      expanded.classList.add('hidden');
+    if (minimized && expanded) {
+      if (this.isExpanded) {
+        minimized.classList.add('hidden');
+        expanded.classList.remove('hidden');
+      } else {
+        minimized.classList.remove('hidden');
+        expanded.classList.add('hidden');
+      }
     }
     
     // Update play/pause buttons
@@ -334,12 +379,21 @@ class LoFiRadioPlayer {
     // Update station info
     const stations = this.globalAudio.stations;
     const station = stations[this.currentStation];
-    document.getElementById('current-station').textContent = station.name;
+    const currentStationEl = document.getElementById('current-station');
+    if (currentStationEl) {
+      currentStationEl.textContent = station.name;
+    }
     
     // Update volume display
     const volumeValue = Math.round(this.volume * 100);
-    document.getElementById('volume-slider').value = volumeValue;
-    document.getElementById('volume-display').textContent = volumeValue + '%';
+    const volumeSlider = document.getElementById('volume-slider');
+    if (volumeSlider) {
+      volumeSlider.value = volumeValue;
+    }
+    const volumeDisplay = document.getElementById('volume-display');
+    if (volumeDisplay) {
+      volumeDisplay.textContent = volumeValue + '%';
+    }
     this.updateVolumeSliderBackground(volumeValue);
     
     this.updateStationUI();
@@ -352,28 +406,41 @@ class LoFiRadioPlayer {
       
       if (index === this.currentStation) {
         option.classList.add('selected');
-        container.classList.remove('bg-gray-50', 'border-gray-200');
-        container.classList.add('bg-purple-50', 'border-purple-200');
-        dot.classList.remove('bg-gray-400');
-        dot.classList.add('bg-purple-600');
+        if (container) {
+          container.classList.remove('bg-gray-50', 'border-gray-200');
+          container.classList.add('bg-purple-50', 'border-purple-200');
+        }
+        if (dot) {
+          dot.classList.remove('bg-gray-400');
+          dot.classList.add('bg-purple-600');
+        }
       } else {
         option.classList.remove('selected');
-        container.classList.remove('bg-purple-50', 'border-purple-200');
-        container.classList.add('bg-gray-50', 'border-gray-200');
-        dot.classList.remove('bg-purple-600');
-        dot.classList.add('bg-gray-400');
+        if (container) {
+          container.classList.remove('bg-purple-50', 'border-purple-200');
+          container.classList.add('bg-gray-50', 'border-gray-200');
+        }
+        if (dot) {
+          dot.classList.remove('bg-purple-600');
+          dot.classList.add('bg-gray-400');
+        }
       }
     });
   }
   
   updateStatus(status) {
-    document.getElementById('radio-status').textContent = status;
+    const radioStatus = document.getElementById('radio-status');
+    if (radioStatus) {
+      radioStatus.textContent = status;
+    }
   }
   
   updateVolumeSliderBackground(value) {
     const slider = document.getElementById('volume-slider');
-    const percentage = value;
-    slider.style.background = `linear-gradient(to right, #9333ea 0%, #9333ea ${percentage}%, #e5e7eb ${percentage}%, #e5e7eb 100%)`;
+    if (slider) {
+      const percentage = value;
+      slider.style.background = `linear-gradient(to right, #9333ea 0%, #9333ea ${percentage}%, #e5e7eb ${percentage}%, #e5e7eb 100%)`;
+    }
   }
   
   showLoading() {
@@ -400,17 +467,27 @@ class LoFiRadioPlayer {
   }
 }
 
-// Initialize the radio player when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-  new LoFiRadioPlayer();
-});
-
-// Also initialize on astro:page-load for view transitions
-document.addEventListener('astro:page-load', () => {
-  // Only initialize if not already initialized
-  if (!window.lofiRadioPlayerInstance) {
+// Initialize the radio player
+function initializeRadioPlayer() {
+  // Clean up any existing instance
+  if (window.lofiRadioPlayerInstance) {
+    // Re-setup event listeners for the existing instance
+    window.lofiRadioPlayerInstance.setupEventListeners();
+    window.lofiRadioPlayerInstance.updateUI();
+  } else {
+    // Create new instance
     window.lofiRadioPlayerInstance = new LoFiRadioPlayer();
   }
+}
+
+// Initialize on first page load
+document.addEventListener('DOMContentLoaded', () => {
+  initializeRadioPlayer();
+});
+
+// Re-initialize on Astro page transitions
+document.addEventListener('astro:page-load', () => {
+  initializeRadioPlayer();
 });
 </script>
 
