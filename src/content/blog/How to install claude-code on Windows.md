@@ -451,12 +451,12 @@ claude --debug
 
 ## Conclusion: You're Ready to Code with AI!
 
-Congratulations! 🎉 You've successfully installed Claude Code on Windows. You now have:
+Congratulations!  You've successfully installed Claude Code on Windows. You now have:
 
-- ✅ A working AI coding assistant
-- ✅ The ability to get instant help with programming
-- ✅ A tool that grows with your skills
-- ✅ Access to cutting-edge AI technology
+-  A working AI coding assistant
+-  The ability to get instant help with programming
+-  A tool that grows with your skills
+-  Access to cutting-edge AI technology
 
 ### Your First Steps
 
@@ -471,7 +471,7 @@ Congratulations! 🎉 You've successfully installed Claude Code on Windows. You 
 
 ### Getting Help
 
-> [!TIP]
+> **T**IP
 > **If you get stuck:**
 
 - **Built-in help:** `claude --help`
