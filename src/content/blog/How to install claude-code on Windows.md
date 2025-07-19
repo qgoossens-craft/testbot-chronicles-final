@@ -101,7 +101,7 @@ You cannot use Claude Code on free accounts. I highly recommend you just take a 
 
 Obviously, if you're **really** new to all of this, please take the time to familiarize yourself with AI Agents before spending money on something that wouldn't suit you.
 
-![--versions(/images/blog/claude-code/-version.png)
+![--versions](/images/blog/claude-code/version.png)
 
 ## Installation Process: Step by Step
 
@@ -297,7 +297,7 @@ This opens a conversation where you can:
 > - "What's the difference between Git and GitHub?"
 > - "What's the answer to everything in the universe ?"
 
-![42](images/blog/claude-code/42.png)
+![42](/images/blog/claude-code/42.png)
 
 
 ### Project-Specific Help
