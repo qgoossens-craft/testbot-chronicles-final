@@ -460,7 +460,8 @@ Congratulations! 🎉 You've successfully installed Claude Code on Windows. You 
 
 ### Your First Steps
 
-> [!NOTE]
+> **NOTE**
+> 
 > **Recommended first actions:**
 
 1. **Start simple:** `claude "Hello! I'm new to programming. Can you help me write my first HTML page?"`
