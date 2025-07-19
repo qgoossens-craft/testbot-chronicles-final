@@ -1,6 +1,6 @@
 ---
 title: 'How to install claude-code on Windows'
-description: 'Now that Anthropic allows Windows users to use claude-code without WSL (Windows Subsystem for Linux), let's dive into setting up your AI code companion with a step-by-step approach that anyone can follow.'
+description: "Now that Anthropic allows Windows users to use claude-code without WSL (Windows Subsystem for Linux), let's dive into setting up your AI code companion with a step-by-step approach that anyone can follow."
 pubDate: 2025-07-19
 heroImage: '/images/blog/claude-code/claude.png'  # Optional - blog post header image
 tags: ['claude', 'claude-code', 'tutorial']  # Add relevant tags
@@ -18,7 +18,7 @@ Now that Anthropic allows Windows users to use claude-code without WSL (Windows 
 
 > **Thought**
 > 
-> Anthropic released a significant update allowing Windows users to bypass the Linux sub-machine (WSL) setup entirely. This makes Claude Code accessible to everyone, regardless of technical expertise!
+> Anthropic released a significant update allowing Windows users to bypass the Linux submachine (WSL) setup entirely. This makes Claude Code accessible to everyone, regardless of technical expertise!
 
 Previously, Windows users needed to:
 - Install and configure WSL
