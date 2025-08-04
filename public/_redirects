@@ -1,3 +1,7 @@
+# Redirect all blog URLs to Hashnode
+/blog/*  https://testbot-chronicles.hashnode.dev/:splat  301!
+/blog    https://testbot-chronicles.hashnode.dev/  301!
+
 # Admin routes
 /admin/* /.netlify/functions-internal/ssr/entry 200
 

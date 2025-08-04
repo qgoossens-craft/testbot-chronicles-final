@@ -10,11 +10,4 @@ export default defineConfig({
   site: 'https://titusconsulting.be',
   base: '/',
   output: 'static', // Static build for GitHub Pages
-  markdown: {
-    syntaxHighlight: 'shiki',
-    shikiConfig: {
-      theme: 'github-dark',
-      wrap: true
-    }
-  }
 });

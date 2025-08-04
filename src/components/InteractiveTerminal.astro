@@ -712,22 +712,19 @@
     }
     
     showBlog() {
-      this.addOutput('[*] TestBot Chronicles - Now Live!', 'terminal-blue');
+      this.addOutput('[*] TestBot Chronicles - Now on Hashnode!', 'terminal-blue');
       this.addOutput('', 'terminal-gray');
-      this.addOutput('Latest articles:', 'terminal-gray');
-      this.addOutput('• Welcome to TestBot Chronicles', 'terminal-purple');
-      this.addOutput('• Playwright vs Cypress: A Practical Comparison', 'terminal-purple');
-      this.addOutput('• CI/CD Testing Best Practices', 'terminal-purple');
+      this.addOutput('My blog has moved to a dedicated platform for better content delivery.', 'terminal-gray');
       this.addOutput('', 'terminal-gray');
-      this.addOutput('[>] Visit /blog to read all articles', 'terminal-green');
+      this.addOutput('[>] Visit https://testbot-chronicles.hashnode.dev/', 'terminal-green');
       this.addOutput('', 'terminal-gray');
       
       // Add a redirect after a short delay
       setTimeout(() => {
-        window.location.href = '/blog';
+        window.open('https://testbot-chronicles.hashnode.dev/', '_blank');
       }, 2000);
       
-      this.addOutput('>> Redirecting to blog in 2 seconds...', 'terminal-blue');
+      this.addOutput('>> Opening TestBot Chronicles on Hashnode in 2 seconds...', 'terminal-blue');
     }
     
     showLogo() {
